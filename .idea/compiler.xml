@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SE-Gorup10-CI" target="1.5" />
+      <module name="SE-Gorup10-CI" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
