@@ -1,7 +1,8 @@
 package com.group10.CI;
 
 import java.io.File;
-
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 import org.eclipse.jgit.api.Git;
 
@@ -20,9 +21,8 @@ public class GitHandler {
 
     //Constructor taking the url of the repository as well as the branch name to check out
     public GitHandler(String url, String branch) {
-        // TODO: Create a folder for the repository and clone the repository to that folder
-        this.repoPath = url.substring(url.lastIndexOf('/') + 1);
-        cloneRepo(url);
+        this.repoPath = "temp/" + url.substring(url.lastIndexOf('/') + 1);
+        cloneRepo(url, branch);
         
     }
 
@@ -30,13 +30,13 @@ public class GitHandler {
      * Method to clone the repository
      * @param url the url of the repository
      */
-    public void cloneRepo(String url) {
+    public void cloneRepo(String url, String branch) {
         try {
             //Create file path for the temp repository
-            //Path dir = Paths.get(clonePath);
-            //Files.createDirectories(dir);
-            //Clone the repository
-            Git.cloneRepository().setURI(url).setDirectory(null).call();
+            Git.cloneRepository().setURI(url).setDirectory(new File(repoPath))
+            .setBranchesToClone(Arrays.asList("refs/heads/"+branch))
+            .setBranch("refs/heads/"+branch)
+            .call();
             System.out.println("Repository cloned");
         } catch (Exception e) {
             e.printStackTrace();
