@@ -9,6 +9,7 @@ public class Build {
     private String email;
     private String buildStatus;
     private String testStatus;
+    private String repo;    //The repo name. Ex. ludwigjo/SE-Group10-CI
 
     /**
      * Constructor for Build class.
@@ -17,11 +18,12 @@ public class Build {
      * @param buildStatus the status of the build.
      * @param testStatus the status of the tests.
      */
-    public Build(String prId, String email, String buildStatus, String testStatus) {
+    public Build(String prId, String email, String buildStatus, String testStatus, String repo) {
         this.prId = prId;
         this.email = email;
         this.buildStatus = buildStatus;
         this.testStatus = testStatus;
+        this.repo = repo;
     }
     //Default constructor
     public Build() {}
@@ -59,6 +61,14 @@ public class Build {
     }
 
     /**
+     * Get method for repo.
+     * @return repo the repo name. Ex. ludwigjo/SE-Group10-CI
+     */
+    public String getRepo() {
+        return repo;
+    }
+
+    /**
      * Set method for prId.
      * @param prId the id for a pull request. Also called SHA in the gitHub API.
      */
@@ -88,5 +98,13 @@ public class Build {
      */
     public void setTestStatus(String testStatus) {
         this.testStatus = testStatus;
+    }
+
+    /**
+     * Set method for repo.
+     * @param repo the repo name. Ex. ludwigjo/SE-Group10-CI
+     */
+    public void setRepo(String repo) {
+        this.repo = repo;
     }
 }
