@@ -22,10 +22,13 @@ public class CompileHandlerTest {
 
     /**
      * Test if able to compile the project.
+     *
      * Uses GitHandler to clone this project which is stored in a temp directory.
-     * The directory is removed on tear down. Asserts that status is set to SUCCESS,
-     * and that the compilation information contains BUILD SUCCESS (always outputted
-     * when using mvn compile and the build is successful).
+     * The directory is removed on tear down.
+     *
+     * Asserts that status is set to SUCCESS,and that the compilation information
+     * contains BUILD SUCCESS (always outputted when using mvn compile and the
+     * build is successful).
      */
     @Test
     @DisplayName("Compile success")
@@ -45,6 +48,38 @@ public class CompileHandlerTest {
         // tear down
         gitHandler.deleteClonedRepo(new File("temp"));
     }
+
+
+    /**
+     * Test compiling the branch test/build-fail, which contains code with syntax error, thus
+     * the build should not be successful.
+     *
+     * It uses GitHandler to clone this project which is stored in a temp directory.
+     * The directory is removed on tear down.
+     *
+     * Asserts that status is set to FAILURE,
+     * and that the compilation information contains BUILD FAILURE (always outputted
+     * when using mvn compile and the build is unsuccessful).
+     */
+    @Test
+    @DisplayName("Compile failure")
+    public void testCompileFailure() throws Exception {
+        // set up
+        String mockCommitHash = "9e580b9635fae304a09e6e0dd401910b377a7e51";
+        GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "test/build-fail");
+        CompileHandler ch = new CompileHandler(mockCommitHash, gitHandler.getRepoPath());
+
+        // action
+        ch.compile();
+
+        // assert
+        assertEquals(true, ch.getCompilationInformation().contains("BUILD FAILURE"));
+        assertEquals(Status.FAILURE, ch.getStatus(), "Status expected to be FAILURE if unsuccessful compile.");
+
+        // tear down
+        gitHandler.deleteClonedRepo(new File("temp"));
+    }
+    
 
     /**
      * Test if able to convert InputStream to String.
@@ -70,5 +105,4 @@ public class CompileHandlerTest {
         // assert
         assertEquals(initialString, result, "Initial string and result should be equal");
     }
-
 }
