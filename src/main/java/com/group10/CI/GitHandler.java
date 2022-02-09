@@ -44,7 +44,7 @@ public class GitHandler {
                     .setBranchesToClone(Arrays.asList("refs/heads/" + branch))
                     .setBranch("refs/heads/" + branch)
                     .call();
-            System.out.println("Repository cloned");
+            System.out.println("Repository cloned")
             return true;
         } catch (Exception e) {
             e.printStackTrace();
