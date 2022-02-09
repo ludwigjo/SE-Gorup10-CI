@@ -10,6 +10,19 @@ public class Build {
     private String buildStatus;
     private String testStatus;
 
+    /**
+     * Constructor for Build class.
+     * @param prId the prId of the build. Also called SHA in the gitHub API.
+     * @param email the email of the user who initiated the build.
+     * @param buildStatus the status of the build.
+     * @param testStatus the status of the tests.
+     */
+    public Build(String prId, String email, String buildStatus, String testStatus) {
+        this.prId = prId;
+        this.email = email;
+        this.buildStatus = buildStatus;
+        this.testStatus = testStatus;
+    }
     //Default constructor
     public Build() {}
 
