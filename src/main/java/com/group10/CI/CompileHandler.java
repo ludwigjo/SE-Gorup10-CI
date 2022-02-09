@@ -11,7 +11,7 @@ public class CompileHandler {
     private String commitHash;
     private Status status;
     private String compilationInformation;
-    private String repoPath;
+    protected String repoPath;
 
     /**
      * Default constructor.
@@ -73,7 +73,7 @@ public class CompileHandler {
      * @param is    the InputStream
      * @return      a String of the converted InputStream
      * */
-    private String convertInputStreamToString(InputStream is) throws IOException {
+    protected String convertInputStreamToString(InputStream is) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
@@ -98,7 +98,7 @@ public class CompileHandler {
      * Sets the status
      * @param s     the status
      * */
-    private void setStatus(Status s){
+    protected void setStatus(Status s){
         this.status = s;
     }
 
@@ -106,7 +106,7 @@ public class CompileHandler {
      * Sets the information about the compilation
      * @param s     the information
      * */
-    private void setCompilationInformation(String s)  {
+    protected void setCompilationInformation(String s)  {
         this.compilationInformation = s;
     }
 
