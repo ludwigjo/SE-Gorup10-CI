@@ -37,13 +37,14 @@ public class TestHandlerTest {
         // set up
         String mockCommitHash = "9e580b9635fae304a09e6e0dd401910b377a7e51";
         GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "main");
-        TestHandler ch = new TestHandler(mockCommitHash, gitHandler.getRepoPath());
+        CompileHandler ch = new CompileHandler(mockCommitHash, gitHandler.getRepoPath());
+        TestHandler th = new TestHandler(mockCommitHash, gitHandler.getRepoPath());
 
         // action
-        ch.test();
+        ch.compile();
+        th.test();
 
         // assert
-        assertEquals(true, ch.getCompilationInformation().contains("BUILD SUCCESS"));
         assertEquals(Status.SUCCESS, ch.getStatus(), "Status expected to be SUCCESS if successful test.");
 
         // tear down
@@ -67,14 +68,15 @@ public class TestHandlerTest {
         // set up
         String mockCommitHash = "4c9130f81a2d52176d56ef6a75e4b1070692a498";
         GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "test/test-fail");
-        TestHandler ch = new TestHandler(mockCommitHash, gitHandler.getRepoPath());
+        CompileHandler ch = new CompileHandler(mockCommitHash, gitHandler.getRepoPath());
+        TestHandler th = new TestHandler(mockCommitHash, gitHandler.getRepoPath());
 
         // action
-        ch.test();
+        ch.compile();
+        th.test();
 
         // assert
-        assertEquals(true, ch.getCompilationInformation().contains("BUILD FAILURE"));
-        assertEquals(Status.FAILURE, ch.getStatus(), "Status expected to be FAILURE if unsuccessful test.");
+        assertEquals(Status.FAILURE, th.getStatus(), "Status expected to be FAILURE if unsuccessful test.");
 
         // tear down
         gitHandler.deleteClonedRepo(new File("temp"));
