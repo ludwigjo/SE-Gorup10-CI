@@ -1,6 +1,7 @@
 package com.group10.CI;
 
 import java.util.Base64;
+import java.util.Map;
 
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -25,9 +26,13 @@ public class NotificationHandler {
         Dotenv dotenv = Dotenv.configure().directory(".").ignoreIfMissing().load();
         this.gitUser = dotenv.get("GITHUB_USER");
         this.gitToken = dotenv.get("GITHUB_TOKEN");
-        if(this.gitUser == null || this.gitToken == null)
-            System.out.println("Github credentials not found");
-        System.out.println("user: " + this.gitUser);
+        Map<String, String> env = System.getenv();
+        if(this.gitToken.length() < 5) {
+            System.out.println("Github credentials not found on file");
+            this.gitUser = env.get("GITHUB_USER");
+            this.gitUser = env.get("GITHUB_TOKEN");
+        }
+
         notifyGitHub(build);
     }
 
