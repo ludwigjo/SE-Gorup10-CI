@@ -47,7 +47,6 @@ public class NotificationHandler {
             StringEntity entity = new StringEntity(postBody);
             httpPost.setEntity(entity);
             httpPost.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString(authParams.getBytes()));
-            //Token: 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
             //Sending the request
             HttpResponse response = httpclient.execute(httpPost);
             System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
