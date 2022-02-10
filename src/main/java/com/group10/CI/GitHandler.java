@@ -13,15 +13,8 @@ public class GitHandler {
 
     private String repoPath;
 
-    // Main method to test the GitHandler class
-    public static void main(String[] args) {
-        GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "main");
-        //deleteClonedRepo(new File("temp"));
-    }
-
     // Default constructor
-    public GitHandler() {
-    }
+    public GitHandler() {}
 
     // Constructor taking the url of the repository as well as the branch name to
     // check out
