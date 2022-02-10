@@ -31,6 +31,12 @@ public class NotificationHandler {
             System.out.println("Github credentials not found on file");
             this.gitUser = env.get("GITHUB_USER");
             this.gitUser = env.get("GITHUB_TOKEN");
+            if (this.gitUser == null) {
+                System.out.println("Github credentials user not found on environment variables");
+            }
+            if (this.gitToken == null) {
+                System.out.println("Github credentials token not found on environment variables");
+            }
         }
 
         notifyGitHub(build);
