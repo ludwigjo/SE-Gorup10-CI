@@ -24,8 +24,8 @@ jobs:
         cache: maven
     - name: Create env file
       run: |
-        touch src/main/resources/.env
-        echo GITHUB_USER=${{ secrets.GH_USER }} >> src/main/resources/.env
-        echo GITHUB_TOKEN=${{ secrets.GH_TOKEN }} >> src/main/resources/.env
+        touch ./src/main/resources/.env
+        echo GITHUB_USER=${{ secrets.GH_USER }} >> ./src/main/resources/.env
+        echo GITHUB_TOKEN=${{ secrets.GH_TOKEN }} >> ./src/main/resources/.env
     - name: Build with Maven
       run: mvn -B package --file pom.xml
