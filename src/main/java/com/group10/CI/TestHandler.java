@@ -1,6 +1,9 @@
 package com.group10.CI;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Class responsible for testing a commit.
  * */
@@ -38,20 +41,25 @@ public class TestHandler extends CompileHandler{
         setStatus(Status.PENDING);
 
         File directory = new File(this.repoPath);
-        System.out.println(this.repoPath);
         ProcessBuilder processBuilder = new ProcessBuilder(TEST_COMMAND);
         processBuilder.directory(directory);
 
         Process process;
+        boolean failureFound;
         try {
-            System.out.println("Testing started ...");
             process = processBuilder.start();
+            System.out.println("Compilation started ...");
+
+            joinOutput(convertInputStreamToString(process.getInputStream()));
+
             process.waitFor();
-            System.out.println("Testing waited ...");
-            if (process.exitValue() == 0) setStatus(Status.SUCCESS);
+
+            if(process.exitValue() == 0) setStatus(Status.SUCCESS);
             else setStatus(Status.FAILURE);
 
-            setCompilationInformation(convertInputStreamToString(process.getInputStream()));
+            process.destroy();
+
+            setCompilationInformation(this.jointOutput);
         } catch (IOException | InterruptedException e) {
             System.out.println("\n ---- ERROR ---- \n" + e.getMessage());
             setStatus(Status.ERROR);

@@ -12,6 +12,7 @@ public class CompileHandler {
     protected Status status;
     protected String compilationInformation;
     protected String repoPath;
+    protected String jointOutput;
 
     /**
      * Default constructor.
@@ -21,6 +22,7 @@ public class CompileHandler {
     public CompileHandler(String commitHash, String repoPath){
         this.commitHash = commitHash;
         this.repoPath = repoPath;
+        this.jointOutput = "";
     }
 
     /**
@@ -47,14 +49,19 @@ public class CompileHandler {
 
         Process process;
         try {
-            System.out.println("Compilation started ...");
             process = processBuilder.start();
+            System.out.println("Compilation started ...");
+
+            joinOutput(convertInputStreamToString(process.getInputStream()));
+
             process.waitFor();
 
             if (process.exitValue() == 0) setStatus(Status.SUCCESS);
             else setStatus(Status.FAILURE);
 
-            setCompilationInformation(convertInputStreamToString(process.getInputStream()));
+            process.destroy();
+
+            setCompilationInformation(this.jointOutput);
         } catch (IOException | InterruptedException e) {
             System.out.println("\n ---- ERROR ---- \n" + e.getMessage());
             setStatus(Status.ERROR);
@@ -92,6 +99,15 @@ public class CompileHandler {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * Utility method.
+     * Joins a string to a string.
+     * @param s     the string to add
+     * */
+    protected void joinOutput(String s){
+        this.jointOutput += s;
     }
 
     /**
