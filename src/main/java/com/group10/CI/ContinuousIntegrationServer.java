@@ -34,14 +34,18 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         // if server receives a webhook
         if (request.getMethod().equals("POST")) {
-            handlePostRequest(request);
+            try {
+                handlePostRequest(request);
+            } catch (InterruptedException e) {
+                System.out.println("Error when handling the post request: " + e.getMessage());
+                return;
+            }
         }
-
 
         response.getWriter().println("CI job done");
     }
 
-    private void handlePostRequest(HttpServletRequest request) throws IOException {
+    private void handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
         if(body.equals(null)) return;
         System.out.println("JSON BODY:\n" + body);
@@ -71,6 +75,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
         if(testHandler.getStatus() == Status.ERROR) return;
 
         System.out.println("Build and testing completed.");
+        return;
     }
 
     private JSONObject getBody(HttpServletRequest request){
