@@ -7,10 +7,10 @@ import java.io.*;
 public class TestHandler extends CompileHandler{
     /**
      *inherent from super class:
-     * private String commitHash;
-     * private Status status;
-     * private String compilationInformation;
-     * private String repoPath;
+     * protected String commitHash;
+     * protected Status status;
+     * protected String compilationInformation;
+     * protected String repoPath;
      */
     private final String[] TEST_COMMAND = new String[]{"mvn", "test"};
     
@@ -38,6 +38,7 @@ public class TestHandler extends CompileHandler{
         setStatus(Status.PENDING);
 
         File directory = new File(this.repoPath);
+        System.out.println(this.repoPath);
         ProcessBuilder processBuilder = new ProcessBuilder(TEST_COMMAND);
         processBuilder.directory(directory);
 
@@ -46,7 +47,7 @@ public class TestHandler extends CompileHandler{
             System.out.println("Testing started ...");
             process = processBuilder.start();
             process.waitFor();
-
+            System.out.println("Testing waited ...");
             if (process.exitValue() == 0) setStatus(Status.SUCCESS);
             else setStatus(Status.FAILURE);
 

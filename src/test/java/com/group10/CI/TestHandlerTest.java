@@ -30,6 +30,7 @@ public class TestHandlerTest {
      * contains BUILD SUCCESS (always outputted when using mvn compile and the
      * build is successful).
      */
+    
     @Test
     @DisplayName("Test success")
     public void testTestSuccess() throws Exception {

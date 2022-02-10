@@ -8,9 +8,9 @@ import java.io.*;
 public class CompileHandler {
 
     private final String[] COMPILE_COMMAND = new String[]{"mvn", "compile"};
-    private String commitHash;
-    private Status status;
-    private String compilationInformation;
+    protected String commitHash;
+    protected Status status;
+    protected String compilationInformation;
     protected String repoPath;
 
     /**
