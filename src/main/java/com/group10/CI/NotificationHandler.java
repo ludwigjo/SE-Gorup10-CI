@@ -19,12 +19,15 @@ public class NotificationHandler {
     private Boolean successfulDelivery = false;
     private String gitUser = "";
     private String gitToken = "";
-    
+
     //Constructor creating a notilfication
     public NotificationHandler(Build build){
         Dotenv dotenv = Dotenv.configure().directory(".").ignoreIfMissing().load();
         this.gitUser = dotenv.get("GITHUB_USER");
         this.gitToken = dotenv.get("GITHUB_TOKEN");
+        if(this.gitUser == "" || this.gitToken == "")
+            System.out.println("Github credentials not found");
+        
         notifyGitHub(build);
     }
 
