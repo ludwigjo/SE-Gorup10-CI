@@ -27,7 +27,7 @@ public class NotificationHandler {
         this.gitToken = dotenv.get("GITHUB_TOKEN");
         if(this.gitUser == null || this.gitToken == null)
             System.out.println("Github credentials not found");
-        
+        System.out.println("user: " + this.gitUser);
         notifyGitHub(build);
     }
 
