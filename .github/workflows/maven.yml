@@ -22,12 +22,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - name: Create env variables
-      run: |
-        env:
-          GITHUB_USER: ${{ secrets.GH_USER }} 
-        env:
-          GITHUB_USER: ${{ secrets.GH_TOKEN }} 
-
     - name: Build with Maven
+      env:
+        GITHUB_USER: ${{ secrets.GH_USER }} 
+      env:
+        GITHUB_USER: ${{ secrets.GH_TOKEN }} 
       run: mvn -B package --file pom.xml
