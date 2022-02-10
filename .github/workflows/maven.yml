@@ -25,5 +25,5 @@ jobs:
     - name: Build with Maven
       env:
         GITHUB_USER: ${{ secrets.GH_USER }} 
-        GITHUB_USER: ${{ secrets.GH_TOKEN }} 
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} 
       run: mvn -B package --file pom.xml
