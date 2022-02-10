@@ -63,7 +63,7 @@ public class TestHandlerTest {
      */
     @Test
     @DisplayName("Test failure")
-    public void testCompileFailure() throws Exception {
+    public void testTestFailure() throws Exception {
         // set up
         String mockCommitHash = "1d18f8c74a81a5f376e2ab75fa7feb4cc539c9ea";
         GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "test/build-fail");
