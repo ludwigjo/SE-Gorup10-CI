@@ -36,9 +36,32 @@ public class ContinuousIntegrationServer extends AbstractHandler
     }
 
     // used to start the CI server in command line
+    // takes 0 or 1 arguments.
+    // usage: java ContnuousIntegrationServer.java [PORT_NUMBER]
+    // mvn usage: mvn exec:java -D"exec.mainClass"="com.group10.CI.ContinuousIntegrationServer" -Dexec.args="<PORT_NUMBER>"
     public static void main(String[] args) throws Exception
     {
-        Server server = new Server(8080);
+        int default_port_number = 8080;
+        int port_number;
+
+        if (args.length == 0) {
+            port_number = default_port_number;
+        } else if (args.length == 1) {
+            try {
+                port_number = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                System.out.println("Given port number couldn't be parsed into an integer.");
+                System.out.println("Returning...");
+                return;
+            }
+        } else {
+            System.out.println("Too many args provide 0 or 1 integer argument");
+            System.out.println("Usage: java Cont...Server.java [PORT_NUMBER]");
+            System.out.println("Returning...");
+            return;
+        }
+
+        Server server = new Server(port_number);
         server.setHandler(new ContinuousIntegrationServer());
         server.start();
         server.join();
