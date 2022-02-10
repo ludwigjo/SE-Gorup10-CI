@@ -8,6 +8,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * THIS IS A INCOMPLETE UNIT TEST
+ * It pass compilation but not test
+ */  
+
 /**
  * Unit test for GitHander class.
  * The GitHandler is responsible for cloning and checking out a repository
@@ -33,7 +39,7 @@ public class TestGitHandler {
     public void testGitHandlerClone() {
         GitHandler gh = new GitHandler();
         gh.setRepoPath("temp/SE-Gorup10-CI");  
-        assertEquals(true, gh.cloneRepo("https://github.com/ludwigjo/SE-Gorup10-CI", "main"));
+        assertEquals(false, gh.cloneRepo("https://github.com/ludwigjo/SE-Gorup10-CI", "main"));
         gh.deleteClonedRepo(new File("temp"));
     }
 
