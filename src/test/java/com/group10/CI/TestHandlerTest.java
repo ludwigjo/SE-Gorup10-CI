@@ -65,8 +65,8 @@ public class TestHandlerTest {
     @DisplayName("Test failure")
     public void testTestFailure() throws Exception {
         // set up
-        String mockCommitHash = "1d18f8c74a81a5f376e2ab75fa7feb4cc539c9ea";
-        GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "test/build-fail");
+        String mockCommitHash = "4c9130f81a2d52176d56ef6a75e4b1070692a498";
+        GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "test/test-fail");
         TestHandler ch = new TestHandler(mockCommitHash, gitHandler.getRepoPath());
 
         // action
