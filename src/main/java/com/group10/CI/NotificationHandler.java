@@ -1,18 +1,30 @@
 package com.group10.CI;
 
+import java.util.Base64;
+
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import io.github.cdimascio.dotenv.DotenvException;
+
 /**
  * Handling the notiflication sending notiflications to github and Email
  */
 public class NotificationHandler {
-
+    private Boolean successfulDelivery = false;
+    private String gitUser = "";
+    private String gitToken = "";
+    
     //Constructor creating a notilfication
     public NotificationHandler(Build build){
+        Dotenv dotenv = Dotenv.configure().directory(".").ignoreIfMissing().load();
+        this.gitUser = dotenv.get("GITHUB_USER");
+        this.gitToken = dotenv.get("GITHUB_TOKEN");
         notifyGitHub(build);
     }
 
@@ -23,26 +35,46 @@ public class NotificationHandler {
     public void notifyGitHub(Build build){
         String repo = build.getRepo(); // Ex. ludwigjo/SE-Gorup10-CI
         String prId = build.getPrId();
-        String status = build.getStatus(); //Not sure if we only should send the general status.
-        String postURL = "https://api.github.com/repos/" + repo  + "/" + prId;
-        String postBody = "{\"state\":\"" + status + "\"}";
+        String status = build.getBuildStatus(); //Not sure if we only should send the general status.
+        String postURL = "https://api.github.com/repos/" + repo  + "/statuses/" + prId;
+        String postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://localhost:8080/CI/build.html?prId=" + prId + "\",\"description\":\"Build status\",\"context\":\"CI\"}";
 
         //Sending the post request
         try{
+            String authParams = gitUser + ":" + gitToken;
             HttpClient httpclient = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(postURL);
             StringEntity entity = new StringEntity(postBody);
             httpPost.setEntity(entity);
-            httpPost.setHeader("Content-type", "application/json");
-    
+            httpPost.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString(authParams.getBytes()));
+            //Token: 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
             //Sending the request
             HttpResponse response = httpclient.execute(httpPost);
+            System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+            int statusCode = response.getStatusLine().getStatusCode();
+            if(statusCode == 201){
+                System.out.println("Successfully sent the notification to GitHub");
+                this.successfulDelivery = true;
+            }
+            else{
+                System.out.println("Failed to send the notification to GitHub");
+                this.successfulDelivery = false;
+            }
         }
         catch(Exception e){
             System.err.println("Failure in sending the post request" + e);
+            this.successfulDelivery = false;
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Get method for the successfulDelivery
+     * @return successfulDelivery
+     */
+    public Boolean getSuccessfulDelivery() {
+        return successfulDelivery;
     }
 
     /**
