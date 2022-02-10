@@ -38,14 +38,13 @@ public class TestHandlerTest {
         String mockCommitHash = "9e580b9635fae304a09e6e0dd401910b377a7e51";
         GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "main");
         TestHandler ch = new TestHandler(mockCommitHash, gitHandler.getRepoPath());
-
+    
         // action
         ch.test();
 
         // assert
         assertEquals(true, ch.getCompilationInformation().contains("BUILD SUCCESS"));
         assertEquals(Status.SUCCESS, ch.getStatus(), "Status expected to be SUCCESS if successful test.");
-
         // tear down
         gitHandler.deleteClonedRepo(new File("temp"));
     }
