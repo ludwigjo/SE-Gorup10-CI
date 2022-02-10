@@ -31,7 +31,7 @@ public class TestHandlerTest {
      * build is successful).
      */
     
-    /*@Test
+    @Test
     @DisplayName("Test success")
     public void testTestSuccess() throws Exception {
         // set up
@@ -46,10 +46,9 @@ public class TestHandlerTest {
 
         // assert
         assertEquals(Status.SUCCESS, ch.getStatus(), "Status expected to be SUCCESS if successful test.");
-
         // tear down
         gitHandler.deleteClonedRepo(new File("temp"));
-    }*/
+    }
 
     /**
      * Test the branch identify the test failure, which contains unpassed unit tests, thus
