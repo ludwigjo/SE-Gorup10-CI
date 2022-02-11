@@ -66,15 +66,21 @@ public class ContinuousIntegrationServer extends AbstractHandler
         System.out.println("Compiling project.");
         CompileHandler compileHandler = new CompileHandler(commitSha, repoUrl);
         compileHandler.compile();
+            
+        /* TODO: add notification if compile failed */
         if(compileHandler.getStatus() == Status.ERROR) return;
 
         // test
         System.out.println("Testing project.");
         TestHandler testHandler = new TestHandler(commitSha, repoUrl);
         testHandler.test();
+        
+        /* TODO: add notification if tests failed */
         if(testHandler.getStatus() == Status.ERROR) return;
 
         System.out.println("Build and testing completed.");
+
+        /* TODO: add notification */
         return;
     }
 
