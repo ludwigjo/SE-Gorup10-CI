@@ -28,16 +28,11 @@ public class NotificationHandler {
         this.gitToken = dotenv.get("GITHUB_TOKEN");
         Map<String, String> env = System.getenv();
         if(this.gitToken.length() < 5) {
-            System.out.println("Github credentials not found on file");
+            System.out.println("Github credentials not found on file, trying with system variables");
             this.gitUser = env.get("GITHUB_USER");
             this.gitUser = env.get("GITHUB_TOKEN");
-            System.out.println("length of token: " + this.gitToken.length() + " token: " + this.gitToken);
-            System.out.println("length of user: " + this.gitUser.length() + " user: " + this.gitUser);
-            if (this.gitUser == null) {
-                System.out.println("Github credentials user not found on environment variables");
-            }
-            if (this.gitToken == null) {
-                System.out.println("Github credentials token not found on environment variables");
+            if (this.gitUser.length() == 0 || this.gitToken.length() == 0) {
+                System.out.println("Github credentials user not found as system environment variables");
             }
         }
 
