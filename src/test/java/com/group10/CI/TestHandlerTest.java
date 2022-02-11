@@ -36,7 +36,7 @@ public class TestHandlerTest {
     public void testTestSuccess() throws Exception {
         // set up
         String mockCommitHash = "9e580b9635fae304a09e6e0dd401910b377a7e51";
-        GitHandler gitHandler = new GitHandler("https://github.com/ludwigjo/SE-Gorup10-CI", "main");
+        GitHandler gitHandler = new GitHandler("https://github.com/darkway-s/SE-Group10", "main");
         CompileHandler ch = new CompileHandler(mockCommitHash, gitHandler.getRepoPath());
         TestHandler th = new TestHandler(mockCommitHash, gitHandler.getRepoPath());
 
