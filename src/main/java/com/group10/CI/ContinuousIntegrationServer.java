@@ -26,12 +26,15 @@ public class ContinuousIntegrationServer extends AbstractHandler
                        HttpServletResponse response)
             throws IOException, ServletException
     {
-        response.setContentType("text/html;charset=utf-8");
+        //response.setContentType("text/html;charset=utf-8");
+        response.setContentType("text/plain;charset=UTF-8");
+
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
 
         System.out.println(target);
 
+        response.getWriter().write("Job starting.");
         // if server receives a webhook
         if (request.getMethod() == "POST") {
             System.out.println("### POST REQUEST FROM WEBHOOK RECEIVED ###");
@@ -45,16 +48,16 @@ public class ContinuousIntegrationServer extends AbstractHandler
                 }
 
                 String html = "Commit sha: " + build.getPrId() + " | Build status: " + build.getBuildStatus() + " | Test status: " + build.getTestStatus() + "<p>";
-                response.getWriter().println("CI job done");
-                response.getWriter().println(html);
+                System.out.println("HTML: " + html);
+                response.getWriter().write("CI job done");
+                response.getWriter().write(html);
                 response.getWriter().flush();
             } catch (InterruptedException e) {
                 System.out.println("Error when handling the post request: " + e.getMessage());
                 return;
             }
         }
-
-
+        response.getWriter().write("Job finished.");
     }
 
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
