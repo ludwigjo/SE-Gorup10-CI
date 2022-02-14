@@ -37,14 +37,12 @@ public class ContinuousIntegrationServer extends AbstractHandler
         if (request.getMethod() == "POST") {
             try {
                 Build build = handlePostRequest(request);
+                response.getWriter().println(build.toString());
                 if(build.equals(null)) return;
-                String html = "<html><title></title><body>"
-                        + "<h1> Commit sha: " + build.getPrId() + "<h1>"
-                        + "<p> Build status: " + build.getBuildStatus() + "<p>"
-                        + "<p> Test status: " + build.getTestStatus() + "<p>"
-                        + "</body></html>";
+
+                String html = "Commit sha: " + build.getPrId() + " | Build status: " + build.getBuildStatus() + " | Test status: " + build.getTestStatus() + "<p>";
                 response.getWriter().println("CI job done");
-                response.getWriter().write(html);
+                response.getWriter().println(html);
                 response.getWriter().flush();
             } catch (InterruptedException e) {
                 System.out.println("Error when handling the post request: " + e.getMessage());
