@@ -4,3 +4,5 @@ target
 temp
 ngrok
 *.iml
+.env
+.vscode/settings.json
