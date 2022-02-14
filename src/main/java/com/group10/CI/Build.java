@@ -7,8 +7,8 @@ public class Build {
     
     private String prId;
     private String email;
-    private String buildStatus;
-    private String testStatus;
+    private Status buildStatus;
+    private Status testStatus;
     private String repo;    //The repo name. Ex. ludwigjo/SE-Group10-CI
 
     /**
@@ -18,7 +18,7 @@ public class Build {
      * @param buildStatus the status of the build.
      * @param testStatus the status of the tests.
      */
-    public Build(String prId, String email, String buildStatus, String testStatus, String repo) {
+    public Build(String prId, String email, Status buildStatus, Status testStatus, String repo) {
         this.prId = prId;
         this.email = email;
         this.buildStatus = buildStatus;
@@ -48,7 +48,7 @@ public class Build {
      * Get method for buildStatus.
      * @return buildStatus the status of the build.
      */
-    public String getBuildStatus() {
+    public Status getBuildStatus() {
         return buildStatus;
     }
 
@@ -56,7 +56,7 @@ public class Build {
      * Get method for testStatus.
      * @return testStatus the status of the tests.
      */
-    public String getTestStatus() {
+    public Status getTestStatus() {
         return testStatus;
     }
 
@@ -67,6 +67,12 @@ public class Build {
     public String getRepo() {
         return repo;
     }
+
+    /**
+     * Get method for the build
+     * @return  this build object
+     * */
+    public Build getBuild(){ return this; }
 
     /**
      * Set method for prId.
@@ -88,7 +94,7 @@ public class Build {
      * Set method for buildStatus.
      * @param buildStatus the status of the build.
      */
-    public void setBuildStatus(String buildStatus) {
+    public void setBuildStatus(Status buildStatus) {
         this.buildStatus = buildStatus;
     }
 
@@ -96,7 +102,7 @@ public class Build {
      * Set method for testStatus.
      * @param testStatus the status of the tests.
      */
-    public void setTestStatus(String testStatus) {
+    public void setTestStatus(Status testStatus) {
         this.testStatus = testStatus;
     }
 
