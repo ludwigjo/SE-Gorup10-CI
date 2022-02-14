@@ -70,14 +70,16 @@ public class ContinuousIntegrationServer extends AbstractHandler
         String commitSha = body.getString("after");
         System.out.println("Commit Sha: " + commitSha);
 
+        String gitUrl = body.getJSONObject("pull_request").getJSONObject("head").getJSONObject("repo").getString("full_name");
+
         // clone
-        System.out.println("Cloning branch: " + branch + " from url: " + repoUrl);
+        System.out.println("Cloning branch: " + branch + " from url: " + gitUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
         if(!hasCloned) return null;  //unable to clone
 
         // instantiate new build object and notification handler
-        Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, git.getRepoPath());
+        Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, gitUrl);
         NotificationHandler notifier = new NotificationHandler();
 
         // compile
