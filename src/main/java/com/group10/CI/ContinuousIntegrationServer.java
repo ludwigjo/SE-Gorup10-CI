@@ -31,9 +31,10 @@ public class ContinuousIntegrationServer extends AbstractHandler
         baseRequest.setHandled(true);
 
         System.out.println(target);
+        response.getWriter().println("CI job in progress...");
 
         // if server receives a webhook
-        if (request.getMethod().equals("POST")) {
+        if (request.getMethod() == "POST") {
             try {
                 Build build = handlePostRequest(request);
                 if(build.equals(null)) return;
