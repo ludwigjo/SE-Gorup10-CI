@@ -57,16 +57,24 @@ public class ContinuousIntegrationServer extends AbstractHandler
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
         if(body.equals(new JSONObject("{}"))) {
-            System.out.println();
+            System.out.println("Json object is {}");
             return null;
         }
-        System.out.println("JSON BODY:\n" + body);
+        System.out.println("JSON BODY:" + body);
 
         String[] ref = body.getString("ref").split("/");
+        System.out.println("Ref: " + ref);
+
         // since split is on / we want the last two parts
         String branch = String.join("", Arrays.copyOfRange(ref, (ref.length - 2), ref.length));
+        System.out.println("Branch: " + branch);
+
         String repoUrl = body.getJSONObject("repository").getString("url");
+        System.out.println("Repo Url: " + repoUrl);
+
         String commitSha = body.getString("after");
+        System.out.println("Commit Sha: " + commitSha);
+
 
         // instantiate new build object and notification handler
         Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, repoUrl);
