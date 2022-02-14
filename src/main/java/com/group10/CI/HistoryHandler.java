@@ -24,6 +24,12 @@ public class HistoryHandler {
      * @param repoName The name of the repository tested
      */
     public HistoryHandler(String repoName) {
+        File historyDirectory = new File(historyFolderPath);
+
+        if (!historyDirectory.exists()) {
+            historyDirectory.mkdir();
+        }
+
         this.repoHistoryFolder = historyFolderPath + repoName + "/";
         File directory = new File(String.valueOf(historyFolderPath + repoName));
 
