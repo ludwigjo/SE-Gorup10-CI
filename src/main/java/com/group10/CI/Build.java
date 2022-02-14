@@ -113,4 +113,12 @@ public class Build {
     public void setRepo(String repo) {
         this.repo = repo;
     }
+
+    public String toString(){
+        String s = "";
+        s += "Commit SHA: " + this.getPrId();
+        s += "\nBuild Status: " + this.getBuildStatus();
+        s += "\nTest Status" + this.getTestStatus();
+        return s;
+    }
 }
