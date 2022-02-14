@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 public class HistoryHandler {
 
-    protected final String historyFolderPath = "/history/";
+    protected final String historyFolderPath = "history/";
     protected String repoHistoryFolder;
 
     /**
@@ -25,6 +25,11 @@ public class HistoryHandler {
      */
     public HistoryHandler(String repoName) {
         this.repoHistoryFolder = historyFolderPath + repoName + "/";
+        File directory = new File(String.valueOf(historyFolderPath + repoName));
+
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
     }
 
     /**
