@@ -48,9 +48,9 @@ public class HistoryHandlerTest {
      */
     @BeforeEach
     public void resetTestFolder() throws IOException {
-        FileUtils.cleanDirectory(new File("history/testing/"));
+        FileUtils.cleanDirectory(new File("history/testing"));
 
-        FileWriter fw = new FileWriter("history/testing/testExists.txt");
+        FileWriter fw = new FileWriter(new File("history/testing/fileExists.txt"));
         fw.write(testMessage);
         fw.close();
     }
@@ -63,7 +63,7 @@ public class HistoryHandlerTest {
      */
     @AfterAll
     public static void cleanUp() throws IOException {
-        FileUtils.cleanDirectory(new File("history/testing/"));
+        FileUtils.cleanDirectory(new File("history/testing"));
     }
 
     /**
@@ -126,6 +126,7 @@ public class HistoryHandlerTest {
             String message = hh.getHistory("fileExists");
             assertEquals(testMessage, message, "Should get the right content from file");
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
             fail();
         }
     }
