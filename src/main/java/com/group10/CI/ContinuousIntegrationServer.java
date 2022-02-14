@@ -113,7 +113,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
             String line;
             while ((line = br.readLine()) != null){
                 stringBuilder.append(line);
-                System.out.println("LINE ", line);
+                System.out.println("LINE "+ line);
             }
             return new JSONObject(stringBuilder.toString());
         } catch (IOException e) {
