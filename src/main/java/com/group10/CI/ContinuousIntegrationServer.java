@@ -107,7 +107,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
             BufferedReader br = request.getReader();
             String line;
             while ((line = br.readLine()) != null) stringBuilder.append(line);
-            return new JSONObject(stringBuilder);
+            return new JSONObject(stringBuilder.toString());
         } catch (IOException e) {
             System.out.println("ERROR");
             System.out.println("Unable to get body from request: " + e.getMessage());
