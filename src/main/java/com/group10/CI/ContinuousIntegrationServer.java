@@ -62,14 +62,10 @@ public class ContinuousIntegrationServer extends AbstractHandler
         }
         System.out.println("JSON BODY:" + body);
 
-        String[] ref = body.getString("ref").split("/");
-        System.out.println("Ref: " + ref);
-
-        // since split is on / we want the last two parts
-        String branch = String.join("", Arrays.copyOfRange(ref, (ref.length - 2), ref.length));
+        String branch = body.getJSONObject("pull_request").getJSONObject("head").getString("ref");
         System.out.println("Branch: " + branch);
 
-        String repoUrl = body.getJSONObject("repository").getString("url");
+        String repoUrl = body.getJSONObject("repository").getString("html_url");
         System.out.println("Repo Url: " + repoUrl);
 
         String commitSha = body.getString("after");
@@ -121,7 +117,6 @@ public class ContinuousIntegrationServer extends AbstractHandler
             String line;
             while ((line = br.readLine()) != null){
                 stringBuilder.append(line);
-                System.out.println("LINE "+ line);
             }
             return new JSONObject(stringBuilder.toString());
         } catch (IOException e) {
