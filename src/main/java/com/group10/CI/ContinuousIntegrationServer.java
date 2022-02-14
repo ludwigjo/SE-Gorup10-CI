@@ -55,32 +55,41 @@ public class ContinuousIntegrationServer extends AbstractHandler
         String branch = String.join("", Arrays.copyOfRange(ref, (ref.length - 2), (ref.length - 1)));
         String repoUrl = body.getJSONObject("repository").getString("url");
         String commitSha = body.getString("after");
+
+        // instantiate new build object and notification handler
+        Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, repoUrl);
+        NotificationHandler notifier = new NotificationHandler();
+
         // clone
         System.out.println("Cloning branch: " + branch + " from url: " + repoUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
-        if(!hasCloned) return;
+        if(!hasCloned) return;  //unable to clone
 
-        File f = new File(git.getRepoPath());
         // compile
         System.out.println("Compiling project.");
         CompileHandler compileHandler = new CompileHandler(commitSha, repoUrl);
         compileHandler.compile();
-            
-        /* TODO: add notification if compile failed */
+
+        // if unable to execute compilation command, we do not want to send a notification
         if(compileHandler.getStatus() == Status.ERROR) return;
+
+        build.setBuildStatus(compileHandler.getStatus());
 
         // test
         System.out.println("Testing project.");
         TestHandler testHandler = new TestHandler(commitSha, repoUrl);
         testHandler.test();
-        
-        /* TODO: add notification if tests failed */
+
+        // if unable to execute test command, we do not want to send a notification
         if(testHandler.getStatus() == Status.ERROR) return;
 
-        System.out.println("Build and testing completed.");
+        build.setTestStatus(testHandler.getStatus());
+        System.out.println("Build and testing complete.");
 
-        /* TODO: add notification */
+        notifier.notifyGitHub(build);
+
+        if(!notifier.getSuccessfulDelivery()) System.out.println("Unable to notify Github.");
         return;
     }
 
