@@ -35,19 +35,28 @@ public class ContinuousIntegrationServer extends AbstractHandler
         // if server receives a webhook
         if (request.getMethod().equals("POST")) {
             try {
-                handlePostRequest(request);
+                Build build = handlePostRequest(request);
+                if(build.equals(null)) return;
+                String html = "<html><title></title><body>"
+                        + "<h1> Commit sha: " + build.getPrId() + "<h1>"
+                        + "<p> Build status: " + build.getBuildStatus() + "<p>"
+                        + "<p> Test status: " + build.getTestStatus() + "<p>"
+                        + "</body></html>";
+                response.getWriter().println("CI job done");
+                response.getWriter().write(html);
+                response.getWriter().flush();
             } catch (InterruptedException e) {
                 System.out.println("Error when handling the post request: " + e.getMessage());
                 return;
             }
         }
 
-        response.getWriter().println("CI job done");
+
     }
 
-    private void handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
+    private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
-        if(body.equals(null)) return;
+        if(body.equals(null)) return null;
         System.out.println("JSON BODY:\n" + body);
 
         String[] ref = body.getString("ref").split("/");
@@ -64,7 +73,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
         System.out.println("Cloning branch: " + branch + " from url: " + repoUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
-        if(!hasCloned) return;  //unable to clone
+        if(!hasCloned) return null;  //unable to clone
 
         // compile
         System.out.println("Compiling project.");
@@ -72,7 +81,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
         compileHandler.compile();
 
         // if unable to execute compilation command, we do not want to send a notification
-        if(compileHandler.getStatus() == Status.ERROR) return;
+        if(compileHandler.getStatus() == Status.ERROR) return null;
 
         build.setBuildStatus(compileHandler.getStatus());
 
@@ -82,7 +91,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
         testHandler.test();
 
         // if unable to execute test command, we do not want to send a notification
-        if(testHandler.getStatus() == Status.ERROR) return;
+        if(testHandler.getStatus() == Status.ERROR) return null;
 
         build.setTestStatus(testHandler.getStatus());
         System.out.println("Build and testing complete.");
@@ -90,7 +99,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
         notifier.notifyGitHub(build);
 
         if(!notifier.getSuccessfulDelivery()) System.out.println("Unable to notify Github.");
-        return;
+        return build;
     }
 
     private JSONObject getBody(HttpServletRequest request){
