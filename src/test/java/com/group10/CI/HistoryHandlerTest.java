@@ -126,7 +126,6 @@ public class HistoryHandlerTest {
             String message = hh.getHistory("fileExists");
             assertEquals(testMessage, message, "Should get the right content from file");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             fail();
         }
     }
