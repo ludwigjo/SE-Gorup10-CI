@@ -60,7 +60,6 @@ public class ContinuousIntegrationServer extends AbstractHandler
             System.out.println("Json object is {}");
             return null;
         }
-        System.out.println("JSON BODY:" + body);
 
         String branch = body.getJSONObject("pull_request").getJSONObject("head").getString("ref");
         System.out.println("Branch: " + branch);
@@ -71,16 +70,15 @@ public class ContinuousIntegrationServer extends AbstractHandler
         String commitSha = body.getString("after");
         System.out.println("Commit Sha: " + commitSha);
 
-
-        // instantiate new build object and notification handler
-        Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, repoUrl);
-        NotificationHandler notifier = new NotificationHandler();
-
         // clone
         System.out.println("Cloning branch: " + branch + " from url: " + repoUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
         if(!hasCloned) return null;  //unable to clone
+
+        // instantiate new build object and notification handler
+        Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, git.getRepoPath());
+        NotificationHandler notifier = new NotificationHandler();
 
         // compile
         System.out.println("Compiling project.");
@@ -96,6 +94,9 @@ public class ContinuousIntegrationServer extends AbstractHandler
         System.out.println("Testing project.");
         TestHandler testHandler = new TestHandler(commitSha, git.getRepoPath());
         testHandler.test();
+
+        // remove cloned repo
+        git.deleteClonedRepo(new File("temp"));
 
         // if unable to execute test command, we do not want to send a notification
         if(testHandler.getStatus() == Status.ERROR) return null;

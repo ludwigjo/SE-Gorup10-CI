@@ -33,8 +33,10 @@ public class GitHandler {
         if (this.repoPath.equals("")) this.repoPath = "temp/" + url.substring(url.lastIndexOf('/') + 1);
 
         try {
+            File tempDir = new File(this.repoPath);
+            if (tempDir.exists()) deleteClonedRepo(tempDir);
             // Create file path for the temp repository
-            Git.cloneRepository().setURI(url).setDirectory(new File(this.repoPath))
+            Git.cloneRepository().setURI(url).setDirectory(tempDir)
                     .setBranchesToClone(Arrays.asList("refs/heads/" + branch))
                     .setBranch("refs/heads/" + branch)
                     .call();
