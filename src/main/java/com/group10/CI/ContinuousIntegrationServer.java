@@ -34,10 +34,13 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         // if server receives a webhook
         if (request.getMethod() == "POST") {
+            System.out.println("### POST REQUEST FROM WEBHOOK RECEIVED ###");
             try {
                 Build build = handlePostRequest(request);
                 response.getWriter().println(build.toString());
-                if(build.equals(new JSONObject("{}"))) {
+                if(build.equals(null)) {
+                    System.out.println("ERROR: JSON object is {}, or; unable to clone, compile or test\n############");
+                    response.getWriter().flush();
                     return;
                 }
 
@@ -56,24 +59,18 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
-        if(body.equals(new JSONObject("{}"))) {
-            System.out.println("Json object is {}");
-            return null;
-        }
+        if(body.equals(new JSONObject("{}"))) return null;
 
         String branch = body.getJSONObject("pull_request").getJSONObject("head").getString("ref");
-        System.out.println("Branch: " + branch);
-
         String repoUrl = body.getJSONObject("repository").getString("html_url");
-        System.out.println("Repo Url: " + repoUrl);
-
         String commitSha = body.getString("after");
-        System.out.println("Commit Sha: " + commitSha);
-
         String gitUrl = body.getJSONObject("pull_request").getJSONObject("head").getJSONObject("repo").getString("full_name");
 
+        System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: "  + branch + " | Git url: " + gitUrl + " | Temp dir: " + repoUrl);
+
+
         // clone
-        System.out.println("Cloning branch: " + branch + " from url: " + gitUrl);
+        //System.out.println("Cloning branch " + branch + " from url " + gitUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
         if(!hasCloned) return null;  //unable to clone

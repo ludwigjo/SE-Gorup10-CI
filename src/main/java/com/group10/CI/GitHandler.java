@@ -21,7 +21,7 @@ public class GitHandler {
     public GitHandler(String url, String branch) {
         this.repoPath = "temp/" + url.substring(url.lastIndexOf('/') + 1);
         Boolean res = cloneRepo(url, branch);
-        System.out.println(res);
+        //System.out.println(res);
     }
 
     /**
@@ -40,7 +40,7 @@ public class GitHandler {
                     .setBranchesToClone(Arrays.asList("refs/heads/" + branch))
                     .setBranch("refs/heads/" + branch)
                     .call();
-            System.out.println("Repository cloned");
+            //System.out.println("Repository cloned");
             return true;
         } catch (Exception e) {
             e.printStackTrace();

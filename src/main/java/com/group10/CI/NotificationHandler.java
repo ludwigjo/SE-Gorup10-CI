@@ -50,7 +50,7 @@ public class NotificationHandler {
         String postURL = "https://api.github.com/repos/" + repo  + "/statuses/" + prId;
         String postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://localhost:8080/CI/build.html?prId=" + prId + "\",\"description\":\"Build status\",\"context\":\"CI\"}";
 
-        System.out.println("REPO: " + repo + " PR ID: " + prId + " POST URL: "+ postURL + " POST BODY: " + postBody);
+        //System.out.println("REPO: " + repo + " PR ID: " + prId + " POST URL: "+ postURL + " POST BODY: " + postBody);
         //Sending the post request
         try{
             String authParams = gitUser + ":" + gitToken;
