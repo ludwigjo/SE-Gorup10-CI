@@ -84,7 +84,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         // compile
         System.out.println("Compiling project.");
-        CompileHandler compileHandler = new CompileHandler(commitSha, repoUrl);
+        CompileHandler compileHandler = new CompileHandler(commitSha, git.getRepoPath());
         compileHandler.compile();
 
         // if unable to execute compilation command, we do not want to send a notification
@@ -94,7 +94,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         // test
         System.out.println("Testing project.");
-        TestHandler testHandler = new TestHandler(commitSha, repoUrl);
+        TestHandler testHandler = new TestHandler(commitSha, git.getRepoPath());
         testHandler.test();
 
         // if unable to execute test command, we do not want to send a notification
