@@ -1,4 +1,5 @@
 package com.group10.CI;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
@@ -15,18 +16,17 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import org.json.*;
+
 /**
- Skeleton of a ContinuousIntegrationServer which acts as webhook
- See the Jetty documentation for API documentation of those classes.
+ * Skeleton of a ContinuousIntegrationServer which acts as webhook
+ * See the Jetty documentation for API documentation of those classes.
  */
-public class ContinuousIntegrationServer extends AbstractHandler
-{
+public class ContinuousIntegrationServer extends AbstractHandler {
     public void handle(String target,
-                       Request baseRequest,
-                       HttpServletRequest request,
-                       HttpServletResponse response)
-            throws IOException, ServletException
-    {
+            Request baseRequest,
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException, ServletException {
         response.setContentType("text/html;charset=utf-8");
         response.setContentType("text/plain;charset=UTF-8");
 
@@ -35,9 +35,8 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         System.out.println(target);
 
-
         PrintWriter out = response.getWriter();
-       // out.println("Job starting.");
+        // out.println("Job starting.");
         Build build;
         // if server receives a webhook
         if (request.getMethod() == "POST") {
@@ -47,44 +46,73 @@ public class ContinuousIntegrationServer extends AbstractHandler
             System.out.println("### POST REQUEST FROM WEBHOOK RECEIVED ###");
             try {
                 build = handlePostRequest(request);
-                if(build.equals(null)) return;
+                if (build.equals(null))
+                    return;
 
-                /*TODO: Add information to history object*/
-                /*String html = "Commit sha: " + build.getPrId() + " | Build status: " + build.getBuildStatus() + " | Test status: " + build.getTestStatus();
-                System.out.println("HTML: " + html);
-                out.println(html);*/
+                /* TODO: Add information to history object */
+                /*
+                 * String html = "Commit sha: " + build.getPrId() + " | Build status: " +
+                 * build.getBuildStatus() + " | Test status: " + build.getTestStatus();
+                 * System.out.println("HTML: " + html);
+                 * out.println(html);
+                 */
 
             } catch (InterruptedException e) {
                 System.out.println("Error when handling the post request: " + e.getMessage());
                 return;
             }
+        } else if (request.getMethod() == "GET") {
+            String getResp = handleGetRequest(request, target);
+
+            out.write(getResp);
         }
         // remember to flush after when finished writing!
         out.flush();
 
     }
 
-    private void handleGetRequest(){
-        /*TODO*/
+    private String handleGetRequest(HttpServletRequest request, String target) {
+        // Trim following and preceding slashes of the target uri
+        target = target.replaceFirst("^/", "").replace("/$", "");
+
+        // Match which function we want to reach
+        if (target.equals("history")) {
+            // TODO: list items in history directory to a html document
+            File historyDir = new File("history");
+            return Arrays.toString(historyDir.list());
+        } else if (target.matches("history/[A-Za-z0-9_.-]+")) {
+            // TODO: list items in repo history directory to a html document
+            File dir = new File(target);
+            return Arrays.toString(dir.list());
+        } else if (target.matches("history/[A-Za-z0-9_.-]+/[A-Za-z0-9]+")) {
+            String[] targetParts = target.split("/");
+            // TODO: fetch items from file and place in a html document
+            return targetParts[2];
+        } else {
+            return "No content here";
+        }
     }
 
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
-        if(body.equals(new JSONObject("{}"))) return null;
+        if (body.equals(new JSONObject("{}")))
+            return null;
 
         String branch = body.getJSONObject("pull_request").getJSONObject("head").getString("ref");
         String repoUrl = body.getJSONObject("repository").getString("html_url");
         String commitSha = body.getString("after");
-        String gitUrl = body.getJSONObject("pull_request").getJSONObject("head").getJSONObject("repo").getString("full_name");
+        String gitUrl = body.getJSONObject("pull_request").getJSONObject("head").getJSONObject("repo")
+                .getString("full_name");
 
-        System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: "  + branch + " | Git url: " + gitUrl + " | Temp dir: " + repoUrl);
-
+        System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: " + branch + " | Git url: "
+                + gitUrl + " | Temp dir: " + repoUrl);
 
         // clone
-        //System.out.println("Cloning branch " + branch + " from url " + gitUrl);
+        // System.out.println("Cloning branch " + branch + " from url " + gitUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
-        if(!hasCloned) return null;  //unable to clone
+        if (!hasCloned)
+            return null; // unable to clone
 
         // instantiate new build object and notification handler
         Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, gitUrl);
@@ -95,8 +123,10 @@ public class ContinuousIntegrationServer extends AbstractHandler
         CompileHandler compileHandler = new CompileHandler(commitSha, git.getRepoPath());
         compileHandler.compile();
 
-        // if unable to execute compilation command, we do not want to send a notification
-        if(compileHandler.getStatus() == Status.ERROR) return null;
+        // if unable to execute compilation command, we do not want to send a
+        // notification
+        if (compileHandler.getStatus() == Status.ERROR)
+            return null;
 
         build.setBuildStatus(compileHandler.getStatus());
 
@@ -109,24 +139,26 @@ public class ContinuousIntegrationServer extends AbstractHandler
         git.deleteClonedRepo(new File("temp"));
 
         // if unable to execute test command, we do not want to send a notification
-        if(testHandler.getStatus() == Status.ERROR) return null;
+        if (testHandler.getStatus() == Status.ERROR)
+            return null;
 
         build.setTestStatus(testHandler.getStatus());
         System.out.println("Build and testing complete.");
 
         notifier.notifyGitHub(build);
 
-        if(!notifier.getSuccessfulDelivery()) System.out.println("Unable to notify Github.");
+        if (!notifier.getSuccessfulDelivery())
+            System.out.println("Unable to notify Github.");
         return build;
     }
 
-    private JSONObject getBody(HttpServletRequest request){
+    private JSONObject getBody(HttpServletRequest request) {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
             BufferedReader br = request.getReader();
             String line;
-            while ((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 stringBuilder.append(line);
             }
             return new JSONObject(stringBuilder.toString());
@@ -141,9 +173,10 @@ public class ContinuousIntegrationServer extends AbstractHandler
     // used to start the CI server in command line
     // takes 0 or 1 arguments.
     // usage: java ContnuousIntegrationServer.java [PORT_NUMBER]
-    // mvn usage: mvn exec:java -D"exec.mainClass"="com.group10.CI.ContinuousIntegrationServer" -Dexec.args="<PORT_NUMBER>"
-    public static void main(String[] args) throws Exception
-    {
+    // mvn usage: mvn exec:java
+    // -D"exec.mainClass"="com.group10.CI.ContinuousIntegrationServer"
+    // -Dexec.args="<PORT_NUMBER>"
+    public static void main(String[] args) throws Exception {
         int default_port_number = 8080;
         int port_number;
 
