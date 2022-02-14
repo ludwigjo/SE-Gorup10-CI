@@ -37,7 +37,9 @@ public class ContinuousIntegrationServer extends AbstractHandler
             try {
                 Build build = handlePostRequest(request);
                 response.getWriter().println(build.toString());
-                if(build.equals(null)) return;
+                if(build.equals(new JSONObject("{}"))) {
+                    return;
+                }
 
                 String html = "Commit sha: " + build.getPrId() + " | Build status: " + build.getBuildStatus() + " | Test status: " + build.getTestStatus() + "<p>";
                 response.getWriter().println("CI job done");
@@ -54,12 +56,15 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
-        if(body.equals(null)) return null;
+        if(body.equals(new JSONObject("{}"))) {
+            System.out.println();
+            return null;
+        }
         System.out.println("JSON BODY:\n" + body);
 
         String[] ref = body.getString("ref").split("/");
         // since split is on / we want the last two parts
-        String branch = String.join("", Arrays.copyOfRange(ref, (ref.length - 2), (ref.length - 1)));
+        String branch = String.join("", Arrays.copyOfRange(ref, (ref.length - 2), ref.length));
         String repoUrl = body.getJSONObject("repository").getString("url");
         String commitSha = body.getString("after");
 
@@ -106,13 +111,16 @@ public class ContinuousIntegrationServer extends AbstractHandler
         try {
             BufferedReader br = request.getReader();
             String line;
-            while ((line = br.readLine()) != null) stringBuilder.append(line);
+            while ((line = br.readLine()) != null){
+                stringBuilder.append(line);
+                System.out.println("LINE ", line);
+            }
             return new JSONObject(stringBuilder.toString());
         } catch (IOException e) {
             System.out.println("ERROR");
             System.out.println("Unable to get body from request: " + e.getMessage());
             System.out.println("Returning...");
-            return null;
+            return new JSONObject("{}");
         }
     }
 
