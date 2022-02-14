@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 import netscape.javascript.JSObject;
@@ -26,7 +27,7 @@ public class ContinuousIntegrationServer extends AbstractHandler
                        HttpServletResponse response)
             throws IOException, ServletException
     {
-        //response.setContentType("text/html;charset=utf-8");
+        response.setContentType("text/html;charset=utf-8");
         response.setContentType("text/plain;charset=UTF-8");
 
         response.setStatus(HttpServletResponse.SC_OK);
@@ -34,30 +35,37 @@ public class ContinuousIntegrationServer extends AbstractHandler
 
         System.out.println(target);
 
-        response.getWriter().write("Job starting.");
+
+        PrintWriter out = response.getWriter();
+       // out.println("Job starting.");
+        Build build;
         // if server receives a webhook
         if (request.getMethod() == "POST") {
+            // all "out.println" in this if-statement will not print since this handles
+            // the POST request.
+            // The "out.println" must be when handling the GET request
             System.out.println("### POST REQUEST FROM WEBHOOK RECEIVED ###");
             try {
-                Build build = handlePostRequest(request);
-                response.getWriter().println(build.toString());
-                if(build.equals(null)) {
-                    System.out.println("ERROR: JSON object is {}, or; unable to clone, compile or test\n############");
-                    response.getWriter().flush();
-                    return;
-                }
+                build = handlePostRequest(request);
+                if(build.equals(null)) return;
 
-                String html = "Commit sha: " + build.getPrId() + " | Build status: " + build.getBuildStatus() + " | Test status: " + build.getTestStatus() + "<p>";
+                /*TODO: Add information to history object*/
+                /*String html = "Commit sha: " + build.getPrId() + " | Build status: " + build.getBuildStatus() + " | Test status: " + build.getTestStatus();
                 System.out.println("HTML: " + html);
-                response.getWriter().write("CI job done");
-                response.getWriter().write(html);
-                response.getWriter().flush();
+                out.println(html);*/
+
             } catch (InterruptedException e) {
                 System.out.println("Error when handling the post request: " + e.getMessage());
                 return;
             }
         }
-        response.getWriter().write("Job finished.");
+        // remember to flush after when finished writing!
+        out.flush();
+
+    }
+
+    private void handleGetRequest(){
+        /*TODO*/
     }
 
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
