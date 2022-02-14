@@ -22,7 +22,7 @@ public class NotificationHandler {
     private String gitToken = "";
 
     //Constructor creating a notilfication
-    public NotificationHandler(Build build){
+    public NotificationHandler(){
         Dotenv dotenv = Dotenv.configure().directory(".").ignoreIfMissing().load();
         this.gitUser = dotenv.get("GITHUB_USER");
         this.gitToken = dotenv.get("GITHUB_TOKEN");
@@ -36,17 +36,17 @@ public class NotificationHandler {
             }
         }
 
-        notifyGitHub(build);
+        //notifyGitHub(build);
     }
 
     /**
      * Sending notifications on status to GitHub using the post API
-     * @param status
+     * @param
      */
     public void notifyGitHub(Build build){
         String repo = build.getRepo(); // Ex. ludwigjo/SE-Gorup10-CI
         String prId = build.getPrId();
-        String status = build.getBuildStatus(); //Not sure if we only should send the general status.
+        String status = build.getBuildStatus().toString().toLowerCase(); //Not sure if we only should send the general status.
         String postURL = "https://api.github.com/repos/" + repo  + "/statuses/" + prId;
         String postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://localhost:8080/CI/build.html?prId=" + prId + "\",\"description\":\"Build status\",\"context\":\"CI\"}";
 
