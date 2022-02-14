@@ -46,7 +46,7 @@ public class NotificationHandler {
     public void notifyGitHub(Build build){
         String repo = build.getRepo(); // Ex. ludwigjo/SE-Gorup10-CI
         String prId = build.getPrId();
-        Status status = build.getBuildStatus(); //Not sure if we only should send the general status.
+        String status = build.getBuildStatus().toString().toLowerCase(); //Not sure if we only should send the general status.
         String postURL = "https://api.github.com/repos/" + repo  + "/statuses/" + prId;
         String postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://localhost:8080/CI/build.html?prId=" + prId + "\",\"description\":\"Build status\",\"context\":\"CI\"}";
 
