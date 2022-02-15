@@ -50,7 +50,7 @@ public class CompileHandler {
         Process process;
         try {
             process = processBuilder.start();
-            System.out.println("Compilation started ...");
+            //System.out.println("Compilation started ...");
 
             joinOutput(convertInputStreamToString(process.getInputStream()));
 
@@ -67,7 +67,7 @@ public class CompileHandler {
             setStatus(Status.ERROR);
             setCompilationInformation(null);
         }
-        System.out.println("Compilation finished with status: " + getStatus());
+        //System.out.println("Compilation finished with status: " + getStatus());
     }
 
 

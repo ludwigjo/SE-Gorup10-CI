@@ -48,7 +48,7 @@ public class TestHandler extends CompileHandler{
         boolean failureFound;
         try {
             process = processBuilder.start();
-            System.out.println("Compilation started ...");
+            //System.out.println("Compilation started ...");
 
             joinOutput(convertInputStreamToString(process.getInputStream()));
 
@@ -65,6 +65,6 @@ public class TestHandler extends CompileHandler{
             setStatus(Status.ERROR);
             setCompilationInformation(null);
         }
-        System.out.println("Testing finished with status: " + getStatus());
+        //System.out.println("Testing finished with status: " + getStatus());
     }
 }
