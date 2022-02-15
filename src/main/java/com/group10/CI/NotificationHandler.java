@@ -56,6 +56,7 @@ public class NotificationHandler {
             postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://0cc9-3-16-36-86.ngrok.io/history/" + repo + "/" + prId + "\",\"description\":\"Build status " + status + " \",\"context\":\"Custom CI Server\"}";
         }
 
+        //System.out.println("REPO: " + repo + " PR ID: " + prId + " POST URL: "+ postURL + " POST BODY: " + postBody);
         //Sending the post request
         try{
             String authParams = gitUser + ":" + gitToken;

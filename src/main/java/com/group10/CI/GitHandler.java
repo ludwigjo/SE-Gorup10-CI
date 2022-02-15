@@ -11,7 +11,7 @@ import org.eclipse.jgit.api.Git;
  */
 public class GitHandler {
 
-    private String repoPath;
+    private String repoPath = "";
 
     // Default constructor
     public GitHandler() {}
@@ -21,8 +21,7 @@ public class GitHandler {
     public GitHandler(String url, String branch) {
         this.repoPath = "temp/" + url.substring(url.lastIndexOf('/') + 1);
         Boolean res = cloneRepo(url, branch);
-        System.out.println(res);
-
+        //System.out.println(res);
     }
 
     /**
@@ -31,13 +30,17 @@ public class GitHandler {
      * @param url the url of the repository
      */
     public Boolean cloneRepo(String url, String branch) {
+        if (this.repoPath.equals("")) this.repoPath = "temp/" + url.substring(url.lastIndexOf('/') + 1);
+
         try {
+            File tempDir = new File(this.repoPath);
+            if (tempDir.exists()) deleteClonedRepo(tempDir);
             // Create file path for the temp repository
-            Git.cloneRepository().setURI(url).setDirectory(new File(repoPath))
+            Git.cloneRepository().setURI(url).setDirectory(tempDir)
                     .setBranchesToClone(Arrays.asList("refs/heads/" + branch))
                     .setBranch("refs/heads/" + branch)
                     .call();
-            System.out.println("Repository cloned");
+            //System.out.println("Repository cloned");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
