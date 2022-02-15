@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.File;
 import java.util.Arrays;
 
 import org.eclipse.jetty.server.Server;
@@ -104,7 +105,6 @@ public class ContinuousIntegrationServer extends AbstractHandler {
 
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
-
         if (body.equals(new JSONObject("{}")))
             return null;
 
