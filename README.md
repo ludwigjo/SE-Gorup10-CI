@@ -1,6 +1,14 @@
-# SE-Gorup10-CI
+# SE-Group10-CI
 
-CI server implementation
+A CI server built to handle Java Maven projects.  
+
+The program contains a few core features. Which are described bellow. The server is based on the skeleton project that we were provided in the beginning and is present in the ContinuousIntegrationServer.java file. 
+
+This is the flow the server is using:
+
+A post request is received as a webhook from GitHub with information about the pull request. The relevant information in the payload from the webhook such as repository name, branch and commit SHA is then parsed. With the information about the build, the repository is cloned and checked out to a temp directory handled by the GitHandler.java. When the branch is ready, the CompileHandler derived from the BuildHandler is compiling the project. The test suite in the project is the executed by the TestHandler.java. Once that is done, a notification is sent with the result to the specified git commit with the NotificationHandler.java. 
+
+Since we are aiming for P+, history of the builds are stored and available on the server. This is done with the HistoryHandler.java. As soon as a notification is delivered, the build information is stored on our server. This build info is later accessible through a get request on the pattern /history/reponame/commit-id.
 
 ## How to run
 
