@@ -48,7 +48,13 @@ public class NotificationHandler {
         String prId = build.getPrId();
         String status = build.getBuildStatus().toString().toLowerCase(); //Not sure if we only should send the general status.
         String postURL = "https://api.github.com/repos/" + repo  + "/statuses/" + prId;
-        String postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://localhost:8080/CI/build.html?prId=" + prId + "\",\"description\":\"Build status\",\"context\":\"CI\"}";
+        String postBody;
+        if(status == "pending"){
+            postBody = "{\"state\":\"" + status + "\",\"description\":\"Build status pending\",\"context\":\"Custom CI Server \"}";
+        }
+        else {
+            postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://0cc9-3-16-36-86.ngrok.io/history/" + repo + "/" + prId + "\",\"description\":\"Build status " + status + " \",\"context\":\"Custom CI Server\"}";
+        }
 
         //Sending the post request
         try{
