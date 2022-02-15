@@ -36,4 +36,17 @@ public class NotificationHandlerTest {
         nh.notifyGitHub(build);
         assertEquals(false, nh.getSuccessfulDelivery());
     }
+
+    /**
+     * Testing that the pending status is set correctly to github.
+     * We should receive a 201 code when the notification is sent to github.
+     */
+    @Test
+    @DisplayName("Positive test for pending status")
+    public void testPendingStatus() {
+        Build build = new Build("78682ea6f5917499797e1a78827a2e41556b44c8", "hello@email.com", Status.PENDING, Status.FAILURE, "ludwigjo/SE-Gorup10-CI");
+        NotificationHandler nh = new NotificationHandler();
+        nh.notifyGitHub(build);
+        assertEquals(true, nh.getSuccessfulDelivery());
+    }
 }
