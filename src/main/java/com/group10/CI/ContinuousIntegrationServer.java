@@ -100,9 +100,12 @@ public class ContinuousIntegrationServer extends AbstractHandler {
 
         String branch = body.getJSONObject("pull_request").getJSONObject("head").getString("ref");
         String repoUrl = body.getJSONObject("repository").getString("html_url");
-        String commitSha = body.getString("after");
+        String commitSha = body.getJSONObject("pull_request").getJSONObject("head").getString("sha");
         String gitUrl = body.getJSONObject("pull_request").getJSONObject("head").getJSONObject("repo")
                 .getString("full_name");
+
+        System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: " + branch + " | Git url: "
+                + gitUrl + " | Temp dir: " + repoUrl);
 
         System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: " + branch + " | Git url: "
                 + gitUrl + " | Temp dir: " + repoUrl);
