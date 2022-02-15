@@ -68,7 +68,7 @@ public class GitHandler {
      * 
      * @param directory the directory
      */
-    public static Boolean deleteClonedRepo(File directory) {
+    public Boolean deleteClonedRepo(File directory) {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
