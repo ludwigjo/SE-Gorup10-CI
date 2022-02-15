@@ -4,16 +4,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import netscape.javascript.JSObject;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import org.json.*;
+
 /**
  Skeleton of a ContinuousIntegrationServer which acts as webhook
  See the Jetty documentation for API documentation of those classes.
