@@ -71,7 +71,8 @@ public class ContinuousIntegrationServer extends AbstractHandler
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
         if(body.equals(new JSONObject("{}"))) return null;
-
+        
+        // Fetch the relevant info from POST request
         String branch = body.getJSONObject("pull_request").getJSONObject("head").getString("ref");
         String repoUrl = body.getJSONObject("repository").getString("html_url");
         String commitSha = body.getJSONObject("pull_request").getJSONObject("head").getString("sha");
