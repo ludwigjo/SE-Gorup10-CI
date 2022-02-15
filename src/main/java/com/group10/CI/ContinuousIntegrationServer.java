@@ -29,7 +29,6 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             HttpServletResponse response)
             throws IOException, ServletException {
         response.setContentType("text/html;charset=utf-8");
-        response.setContentType("text/plain;charset=UTF-8");
 
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
@@ -52,6 +51,9 @@ public class ContinuousIntegrationServer extends AbstractHandler {
                 if (build.equals(null))
                     return;
 
+                String repoName = build.getRepo().substring(build.getRepo().indexOf("/") + 1);
+                HistoryHandler hh = new HistoryHandler(repoName);
+                hh.saveHistory(build.getPrId(), build.toString());
                 /* TODO: Add information to history object */
                 /*
                  * String html = "Commit sha: " + build.getPrId() + " | Build status: " +
