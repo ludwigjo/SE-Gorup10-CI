@@ -45,6 +45,8 @@ public class NotificationHandler {
      */
     public void notifyGitHub(Build build){
         String repo = build.getRepo(); // Ex. ludwigjo/SE-Gorup10-CI
+        //The name witout the user before /
+        String repoName = repo.substring(repo.indexOf("/") + 1);
         String prId = build.getPrId();
         String status = build.getBuildStatus().toString().toLowerCase(); //Not sure if we only should send the general status.
         String postURL = "https://api.github.com/repos/" + repo  + "/statuses/" + prId;
@@ -53,7 +55,7 @@ public class NotificationHandler {
             postBody = "{\"state\":\"" + status + "\",\"description\":\"Build status pending\",\"context\":\"Custom CI Server \"}";
         }
         else {
-            postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://0cc9-3-16-36-86.ngrok.io/history/" + repo + "/" + prId + "\",\"description\":\"Build status " + status + " \",\"context\":\"Custom CI Server\"}";
+            postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://0cc9-3-16-36-86.ngrok.io/history/" + repoName + "/" + prId + "\",\"description\":\"Build status " + status + " \",\"context\":\"Custom CI Server\"}";
         }
 
         //System.out.println("REPO: " + repo + " PR ID: " + prId + " POST URL: "+ postURL + " POST BODY: " + postBody);
