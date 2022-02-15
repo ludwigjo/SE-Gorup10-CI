@@ -37,9 +37,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
 
         System.out.println(target);
 
-
-        PrintWriter out = response.getWriter();
-       // out.println("Job starting.");
+        // out.println("Job starting.");
         Build build;
         // if server receives a webhook
         if (request.getMethod() == "POST") {
@@ -50,12 +48,16 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             try {
 
                 build = handlePostRequest(request);
-                if(build.equals(null)) return;
+                if (build.equals(null))
+                    return;
 
-                /*TODO: Add information to history object*/
-                /*String html = "Commit sha: " + build.getPrId() + " | Build status: " + build.getBuildStatus() + " | Test status: " + build.getTestStatus();
-                System.out.println("HTML: " + html);
-                out.println(html);*/
+                /* TODO: Add information to history object */
+                /*
+                 * String html = "Commit sha: " + build.getPrId() + " | Build status: " +
+                 * build.getBuildStatus() + " | Test status: " + build.getTestStatus();
+                 * System.out.println("HTML: " + html);
+                 * out.println(html);
+                 */
 
             } catch (InterruptedException e) {
                 System.out.println("Error when handling the post request: " + e.getMessage());
@@ -103,19 +105,21 @@ public class ContinuousIntegrationServer extends AbstractHandler {
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {
         JSONObject body = getBody(request);
 
-        if(body.equals(new JSONObject("{}"))) return null;
-        
+        if (body.equals(new JSONObject("{}")))
+            return null;
+
         // Fetch the relevant info from POST request
         String branch = body.getJSONObject("pull_request").getJSONObject("head").getString("ref");
         String repoUrl = body.getJSONObject("repository").getString("html_url");
         String commitSha = body.getJSONObject("pull_request").getJSONObject("head").getString("sha");
-        String gitUrl = body.getJSONObject("pull_request").getJSONObject("head").getJSONObject("repo").getString("full_name");
+        String gitUrl = body.getJSONObject("pull_request").getJSONObject("head").getJSONObject("repo")
+                .getString("full_name");
 
-        System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: "  + branch + " | Git url: " + gitUrl + " | Temp dir: " + repoUrl);
-
+        System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: " + branch + " | Git url: "
+                + gitUrl + " | Temp dir: " + repoUrl);
 
         // clone
-        //System.out.println("Cloning branch " + branch + " from url " + gitUrl);
+        // System.out.println("Cloning branch " + branch + " from url " + gitUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
         if (!hasCloned)
@@ -165,7 +169,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
         try {
             BufferedReader br = request.getReader();
             String line;
-            while ((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 stringBuilder.append(line);
             }
             return new JSONObject(stringBuilder.toString());
