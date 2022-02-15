@@ -50,7 +50,7 @@ public class HistoryHandlerTest {
     public void resetTestFolder() throws IOException {
         FileUtils.cleanDirectory(new File("history/testing"));
 
-        FileWriter fw = new FileWriter(new File("history/testing/fileExists.txt"));
+        FileWriter fw = new FileWriter(new File("history/testing/fileExists"));
         fw.write(testMessage);
         fw.close();
     }
@@ -77,7 +77,7 @@ public class HistoryHandlerTest {
     public void saveHistoryTestFileDoesNotExist() {
         try {
             hh.saveHistory(testCommitId, testMessage);
-            File newHistory = new File("history/testing/" + testCommitId + ".txt");
+            File newHistory = new File("history/testing/" + testCommitId);
             assertEquals(false, newHistory.createNewFile(), "The expected written file shouldn't be new");
         } catch (IOException e) {
             fail();
@@ -92,7 +92,7 @@ public class HistoryHandlerTest {
     @Test
     @DisplayName("Tests saving info to already existing file")
     public void saveHistoryTestFileAlreadyExists() {
-        File existingHistory = new File("history/testing/testExists.txt");
+        File existingHistory = new File("history/testing/testExists");
         long timeBeforeModification = existingHistory.lastModified();
         try {
             hh.saveHistory("testExists", testMessage);

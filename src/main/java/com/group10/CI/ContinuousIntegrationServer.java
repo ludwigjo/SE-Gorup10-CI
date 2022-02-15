@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.File;
@@ -32,9 +34,10 @@ public class ContinuousIntegrationServer extends AbstractHandler {
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
 
+        PrintWriter out = response.getWriter();
+
         System.out.println(target);
 
-        PrintWriter out = response.getWriter();
         // out.println("Job starting.");
         Build build;
         // if server receives a webhook
@@ -44,6 +47,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             // The "out.println" must be when handling the GET request
             System.out.println("### POST REQUEST FROM WEBHOOK RECEIVED ###");
             try {
+
                 build = handlePostRequest(request);
                 if (build.equals(null))
                     return;
@@ -60,14 +64,43 @@ public class ContinuousIntegrationServer extends AbstractHandler {
                 System.out.println("Error when handling the post request: " + e.getMessage());
                 return;
             }
+        } else if (request.getMethod() == "GET") {
+            String resp = handleGetRequest(request, target);
+
+            out.write(resp);
         }
         // remember to flush after when finished writing!
         out.flush();
-
     }
 
-    private void handleGetRequest() {
-        /* TODO */
+    private String handleGetRequest(HttpServletRequest request, String target) {
+        // Trim following and preceding slashes of the target uri
+        target = target.replaceFirst("^/", "").replace("/$", "");
+
+        String[] targetParts = target.split("/");
+        // Match which function we want to reach
+        if (target.equals("history")) {
+            // list items in history directory to a html document
+            File historyDir = new File("history");
+            return HtmlFormater.formatHtmlHrefList("All repos", historyDir.list(), "history/");
+        } else if (target.matches("history/[A-Za-z0-9_.-]+")) {
+            // list items in repo history directory to a html document
+            File dir = new File(target);
+            return HtmlFormater.formatHtmlHrefList("Build history for " + targetParts[1], dir.list(),
+                    targetParts[1] + "/");
+        } else if (target.matches("history/[A-Za-z0-9_.-]+/[A-Za-z0-9]+")) {
+            // fetch items from file and place in a html document, if they exist
+            HistoryHandler hh = new HistoryHandler(targetParts[1]);
+            try {
+                return HtmlFormater.formatHtml("Build " + targetParts[2], hh.getHistory(targetParts[2]));
+            } catch (FileNotFoundException e) {
+                // TODO: handle exception
+                return HtmlFormater.formatHtml("No history found", "There is no history with this ID in this repo");
+            }
+        } else {
+            // if nothing is matched it doesn't exist
+            return HtmlFormater.formatHtml("404 Not Found", "No content here");
+        }
     }
 
     private Build handlePostRequest(HttpServletRequest request) throws IOException, InterruptedException {

@@ -47,7 +47,7 @@ public class HistoryHandler {
      * @throws IOException When there is an error writing to the file
      */
     public void saveHistory(String commitId, String message) throws IOException {
-        FileWriter historyFileWriter = new FileWriter(repoHistoryFolder + commitId + ".txt");
+        FileWriter historyFileWriter = new FileWriter(repoHistoryFolder + commitId);
 
         historyFileWriter.write(message);
 
@@ -63,7 +63,7 @@ public class HistoryHandler {
      * @throws FileNotFoundException When there is no build info file
      */
     public String getHistory(String commitId) throws FileNotFoundException {
-        File historyFile = new File(repoHistoryFolder + commitId + ".txt");
+        File historyFile = new File(repoHistoryFolder + commitId);
 
         Scanner s = new Scanner(historyFile);
         StringBuilder sb = new StringBuilder();
