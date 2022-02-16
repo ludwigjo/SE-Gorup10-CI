@@ -17,7 +17,7 @@ public class NotificationHandlerTest {
     @Test
     @DisplayName("Positive test for build status")
     public void testBuildStatus() {
-        Build build = new Build("78682ea6f5917499797e1a78827a2e41556b44c8", "hello@email.com", Status.SUCCESS, Status.FAILURE, "ludwigjo/SE-Gorup10-CI");
+        Build build = new Build("78682ea6f5917499797e1a78827a2e41556b44c8", "hello@email.com", Status.SUCCESS, Status.FAILURE, "ludwigjo/SE-Gorup10-CI", "BrorSebastianSjovald", "2022-02-15T15:30:00Z");
         NotificationHandler nh = new NotificationHandler();
         nh.notifyGitHub(build);
         assertEquals(true, nh.getSuccessfulDelivery());
@@ -31,7 +31,7 @@ public class NotificationHandlerTest {
     @Test
     @DisplayName("Negative test for build status")
     public void testBuildStatusFail() {
-        Build build = new Build("78682ea6f5917499797e1a78827a2e41556b44c8",  "hello@email.com", Status.SUCCESS, Status.FAILURE, "ludwigjo/SE-Gorup10-CIFail");
+        Build build = new Build("78682ea6f5917499797e1a78827a2e41556b44c8",  "hello@email.com", Status.SUCCESS, Status.FAILURE, "ludwigjo/SE-Gorup10-CIFail", "BrorSebastianSjovald", "2022-02-15T15:30:00Z");
         NotificationHandler nh = new NotificationHandler();
         nh.notifyGitHub(build);
         assertEquals(false, nh.getSuccessfulDelivery());
@@ -44,7 +44,7 @@ public class NotificationHandlerTest {
     @Test
     @DisplayName("Positive test for pending status")
     public void testPendingStatus() {
-        Build build = new Build("78682ea6f5917499797e1a78827a2e41556b44c8", "hello@email.com", Status.PENDING, Status.FAILURE, "ludwigjo/SE-Gorup10-CI");
+        Build build = new Build("78682ea6f5917499797e1a78827a2e41556b44c8", "hello@email.com", Status.PENDING, Status.FAILURE, "ludwigjo/SE-Gorup10-CI", "BrorSebastianSjovald", "2022-02-15T15:30:00Z");
         NotificationHandler nh = new NotificationHandler();
         nh.notifyGitHub(build);
         assertEquals(true, nh.getSuccessfulDelivery());
