@@ -54,3 +54,6 @@ Initial version of TestHandler, TestHandlerTest
 **Sebastian:**
 
 **Şefik:**
+Management and configuration of the remote server,
+Make remote server run 24/7
+deploy.sh, redeploy.sh
