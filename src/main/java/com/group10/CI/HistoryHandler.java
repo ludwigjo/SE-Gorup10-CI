@@ -70,6 +70,7 @@ public class HistoryHandler {
 
         while (s.hasNextLine()) {
             sb.append(s.nextLine());
+            sb.append("\n");
         }
 
         s.close();
