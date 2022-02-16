@@ -55,7 +55,7 @@ public class NotificationHandler {
             postBody = "{\"state\":\"" + status + "\",\"description\":\"Build status pending\",\"context\":\"Custom CI Server \"}";
         }
         else {
-            postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://0cc9-3-16-36-86.ngrok.io/history/" + repoName + "/" + prId + "\",\"description\":\"Build status " + status + " \",\"context\":\"Custom CI Server\"}";
+            postBody = "{\"state\":\"" + status + "\",\"target_url\":\"http://3b82-18-222-141-151.ngrok.io/history/" + repoName + "/" + prId + "\",\"description\":\"Build status " + status + " \",\"context\":\"Custom CI Server\"}";
         }
 
         //System.out.println("REPO: " + repo + " PR ID: " + prId + " POST URL: "+ postURL + " POST BODY: " + postBody);
