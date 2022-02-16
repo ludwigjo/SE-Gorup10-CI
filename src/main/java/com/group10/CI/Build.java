@@ -115,10 +115,11 @@ public class Build {
     }
 
     public String toString(){
-        String s = "";
+        String s = "<span>";
         s += "Commit SHA: " + this.getPrId();
-        s += "\nBuild Status: " + this.getBuildStatus();
-        s += "\nTest Status" + this.getTestStatus();
+        s += " <br> Build Status: " + this.getBuildStatus();
+        s += " <br> Test Status: " + this.getTestStatus();
+        s += "</span>";
         return s;
     }
 }
