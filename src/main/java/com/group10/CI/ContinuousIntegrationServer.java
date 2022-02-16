@@ -37,41 +37,28 @@ public class ContinuousIntegrationServer extends AbstractHandler {
 
         System.out.println(target);
 
-        // out.println("Job starting.");
         Build build;
+
         // if server receives a webhook
         if (request.getMethod() == "POST") {
-            // all "out.println" in this if-statement will not print since this handles
-            // the POST request.
-            // The "out.println" must be when handling the GET request
-            System.out.println("### POST REQUEST FROM WEBHOOK RECEIVED ###");
             try {
-
                 build = handlePostRequest(request);
-                if (build.equals(null))
+                if (build.equals(null)) {
+                    System.out.println("Unable to handle post request. Exiting...");
                     return;
+                }
 
                 String repoName = build.getRepo().substring(build.getRepo().indexOf("/") + 1);
                 HistoryHandler hh = new HistoryHandler(repoName);
                 hh.saveHistory(build.getPrId(), build.toString());
-                /* TODO: Add information to history object */
-                /*
-                 * String html = "Commit sha: " + build.getPrId() + " | Build status: " +
-                 * build.getBuildStatus() + " | Test status: " + build.getTestStatus();
-                 * System.out.println("HTML: " + html);
-                 * out.println(html);
-                 */
-
             } catch (InterruptedException e) {
                 System.out.println("Error when handling the post request: " + e.getMessage());
                 return;
             }
         } else if (request.getMethod() == "GET") {
             String resp = handleGetRequest(request, target);
-
             out.write(resp);
         }
-        // remember to flush after when finished writing!
         out.flush();
     }
 
@@ -121,36 +108,33 @@ public class ContinuousIntegrationServer extends AbstractHandler {
         String gitUrl = head.getJSONObject("repo").getString("full_name");
         String repoUrl = body.getJSONObject("repository").getString("html_url");
 
-        System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: " + branch + " | Git url: "
-                + gitUrl + " | Temp dir: " + repoUrl);
-
         // instantiate new build object and notification handler
         Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, gitUrl, author, time);
         NotificationHandler notifier = new NotificationHandler();
         notifier.notifyGitHub(build);
 
         // clone
-        // System.out.println("Cloning branch " + branch + " from url " + gitUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
-        if (!hasCloned)
-            return null; // unable to clone
+        if (!hasCloned) {
+            System.out.println("Unable to clone repository: " + repoUrl);
+            return null;
+        }
 
         // compile
-        System.out.println("Compiling project.");
         CompileHandler compileHandler = new CompileHandler(commitSha, git.getRepoPath());
         compileHandler.compile();
 
-        // if unable to execute compilation command, we do not want to send a
-        // notification
-        if (compileHandler.getStatus() == Status.ERROR)
+        // if unable to execute compilation command, no notification should be sent
+        if (compileHandler.getStatus() == Status.ERROR) {
+            System.out.println("Unable to compile commit using mvn compile");
             return null;
+        }
 
         build.setBuildStatus(compileHandler.getStatus());
         build.setBuildInfo(compileHandler.getInformation());
 
         // test
-        System.out.println("Testing project.");
         TestHandler testHandler = new TestHandler(commitSha, git.getRepoPath());
         testHandler.test();
 
@@ -158,17 +142,20 @@ public class ContinuousIntegrationServer extends AbstractHandler {
         git.deleteClonedRepo(new File("temp"));
 
         // if unable to execute test command, we do not want to send a notification
-        if (testHandler.getStatus() == Status.ERROR)
+        if (testHandler.getStatus() == Status.ERROR) {
+            System.out.println("Unable to test commit using mvn test.");
             return null;
+        }
 
         build.setTestStatus(testHandler.getStatus());
         build.setTestInfo(testHandler.getInformation());
-        System.out.println("Build and testing complete.");
+        System.out.println("Cloning, compilation and testing complete.");
 
         notifier.notifyGitHub(build);
 
         if (!notifier.getSuccessfulDelivery())
             System.out.println("Unable to notify Github.");
+
         return build;
     }
 
