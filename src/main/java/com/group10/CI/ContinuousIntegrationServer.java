@@ -28,7 +28,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             HttpServletRequest request,
             HttpServletResponse response)
             throws IOException, ServletException {
-        response.setContentType("text/html;charset=utf-8");
+        response.setContentType("text/html;charset=UTF-8");
 
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
@@ -50,7 +50,17 @@ public class ContinuousIntegrationServer extends AbstractHandler {
 
                 String repoName = build.getRepo().substring(build.getRepo().indexOf("/") + 1);
                 HistoryHandler hh = new HistoryHandler(repoName);
-                hh.saveHistory(build.getPrId(), build.toString());
+                FormatHandler fh = new FormatHandler(build.getPrId(), "history/" + repoName);
+                fh.format(build.toString());
+                hh.saveHistory(build.getPrId(), fh.getInformation());
+                /* TODO: Add information to history object */
+                /*
+                 * String html = "Commit sha: " + build.getPrId() + " | Build status: " +
+                 * build.getBuildStatus() + " | Test status: " + build.getTestStatus();
+                 * System.out.println("HTML: " + html);
+                 * out.println(html);
+                 */
+
             } catch (InterruptedException e) {
                 System.out.println("Error when handling the post request: " + e.getMessage());
                 return;
@@ -81,7 +91,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             // fetch items from file and place in a html document, if they exist
             HistoryHandler hh = new HistoryHandler(targetParts[1]);
             try {
-                return HtmlFormater.formatHtml("Build " + targetParts[2], hh.getHistory(targetParts[2]));
+                return hh.getHistory(targetParts[2]);
             } catch (FileNotFoundException e) {
                 // TODO: handle exception
                 return HtmlFormater.formatHtml("No history found", "There is no history with this ID in this repo");
