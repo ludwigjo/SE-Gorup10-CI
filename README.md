@@ -30,8 +30,13 @@ The Notification handler is using GitHub credentials to send the notifications. 
 
 
 ## How to use (For grader)
-The CI server is hosted on a AWS instance and ready to be tested. Since the webhook is configured to run on every PR event. We have prepared an Assesment branch which is has an open PR. Start by making a change to the assesment branch and make a commit. As soon as the commit is registred, the server will send the pending state to GitHub as status to that commit. When the build is finnished and the tests are completed, the status will be updated. The link to view the history is avaiable under the details in the status message. This will show more information on the build. 
+The CI server is hosted on a AWS instance and ready to be tested. Since the webhook is configured to run on every PR event. We have prepared an Assessment branch which is has an open PR. Start by making a change to the assessment branch and make a commit. As soon as the commit is registered, the server will send the pending state to GitHub as status to that commit. When the build is finished and the tests are completed, the status will be updated. The link to view the history is available under the details in the status message. This will show more information on the build. 
 
+## P+ criteria
+We have done the P7 and P9 to qualify for P+. The server keeps track of the previous builds on a unique URL. These builds are stored on the server and is available even after a reboot. We have continuously made sure that we link our commits to an issue in the issue tracker. 
+
+P8 Is about doing something remarkable.
+We have configured our CI to be able to run easily in the cloud with some shell scrips. The CI is currently deployed to an AWS instance. We have also implemented the aha command line tool to format the logs of the compiling and testing. This makes sure that the HTML output on our history page has the same style with colors as the terminal output. 
 
 ## Assessment of Team (Essence)
 _As of February 10th._
