@@ -119,19 +119,18 @@ public class ContinuousIntegrationServer extends AbstractHandler {
 
         System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: " + branch + " | Git url: "
                 + gitUrl + " | Temp dir: " + repoUrl);
-        
+
         // instantiate new build object and notification handler
         Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, gitUrl);
         NotificationHandler notifier = new NotificationHandler();
         notifier.notifyGitHub(build);
-        
+
         // clone
         // System.out.println("Cloning branch " + branch + " from url " + gitUrl);
         GitHandler git = new GitHandler();
         boolean hasCloned = git.cloneRepo(repoUrl, branch);
         if (!hasCloned)
             return null; // unable to clone
-
 
         // compile
         System.out.println("Compiling project.");
@@ -144,6 +143,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             return null;
 
         build.setBuildStatus(compileHandler.getStatus());
+        build.setBuildInfo(compileHandler.getInformation());
 
         // test
         System.out.println("Testing project.");
@@ -158,6 +158,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             return null;
 
         build.setTestStatus(testHandler.getStatus());
+        build.setTestInfo(testHandler.getInformation());
         System.out.println("Build and testing complete.");
 
         notifier.notifyGitHub(build);
