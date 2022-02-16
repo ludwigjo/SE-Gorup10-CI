@@ -7,12 +7,12 @@ import java.util.regex.Pattern;
 /**
  * Class responsible for testing a commit.
  * */
-public class TestHandler extends CompileHandler{
+public class TestHandler extends BuildHandler {
     /**
-     *inherent from super class:
+     * Inherit from super class:
      * protected String commitHash;
      * protected Status status;
-     * protected String compilationInformation;
+     * protected String information;
      * protected String repoPath;
      */
     private final String[] TEST_COMMAND = new String[]{"mvn", "test"};
@@ -37,34 +37,11 @@ public class TestHandler extends CompileHandler{
      * if an error occurred it is null. The status can be retrieved with the getStatus() method
      * and the compilationInformation can be retrieved with getCompilationInformation().
      * */
-    public void test() throws IOException, InterruptedException {
-        setStatus(Status.PENDING);
-
-        File directory = new File(this.repoPath);
-        ProcessBuilder processBuilder = new ProcessBuilder(TEST_COMMAND);
-        processBuilder.directory(directory);
-
-        Process process;
-        boolean failureFound;
+    public void test() {
         try {
-            process = processBuilder.start();
-            //System.out.println("Compilation started ...");
-
-            joinOutput(convertInputStreamToString(process.getInputStream()));
-
-            process.waitFor();
-
-            if(process.exitValue() == 0) setStatus(Status.SUCCESS);
-            else setStatus(Status.FAILURE);
-
-            process.destroy();
-
-            setCompilationInformation(this.jointOutput);
+            runCommand(TEST_COMMAND);
         } catch (IOException | InterruptedException e) {
-            System.out.println("\n ---- ERROR ---- \n" + e.getMessage());
-            setStatus(Status.ERROR);
-            setCompilationInformation(null);
+            System.out.println("--- ERROR ---\n" + e.getMessage());
         }
-        //System.out.println("Testing finished with status: " + getStatus());
     }
 }
