@@ -111,17 +111,21 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             return null;
 
         // Fetch the relevant info from POST request
-        String branch = body.getJSONObject("pull_request").getJSONObject("head").getString("ref");
+        JSONObject pr = body.getJSONObject("pull_request");
+        JSONObject head = pr.getJSONObject("head");
+
+        String author = pr.getJSONObject("user").getString("login");
+        String time = pr.getString("updated_at");
+        String branch = head.getString("ref");
+        String commitSha = head.getString("sha");
+        String gitUrl = head.getJSONObject("repo").getString("full_name");
         String repoUrl = body.getJSONObject("repository").getString("html_url");
-        String commitSha = body.getJSONObject("pull_request").getJSONObject("head").getString("sha");
-        String gitUrl = body.getJSONObject("pull_request").getJSONObject("head").getJSONObject("repo")
-                .getString("full_name");
 
         System.out.println("Handle post request: \nCommit Sha: " + commitSha + " | Branch: " + branch + " | Git url: "
                 + gitUrl + " | Temp dir: " + repoUrl);
         
         // instantiate new build object and notification handler
-        Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, gitUrl);
+        Build build = new Build(commitSha, "", Status.PENDING, Status.PENDING, gitUrl, author, time);
         NotificationHandler notifier = new NotificationHandler();
         notifier.notifyGitHub(build);
         
