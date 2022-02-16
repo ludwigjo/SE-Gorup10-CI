@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class HistoryHandlerTest {
 
     private static HistoryHandler hh;
-    private String testMessage = "I'm having an old friend for dinner";
+    private String testMessage = "I'm having an old friend for dinner\n";
     private String testCommitId = "testingishere";
 
     /**
