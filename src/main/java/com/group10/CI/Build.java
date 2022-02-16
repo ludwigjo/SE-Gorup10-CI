@@ -7,11 +7,13 @@ public class Build {
 
     private String prId;
     private String email;
+    private String repo;    //The repo name. Ex. ludwigjo/SE-Group10-CI
+    private String author;
+    private String time;
     private Status buildStatus;
     private String buildInfo;
     private Status testStatus;
     private String testInfo;
-    private String repo; // The repo name. Ex. ludwigjo/SE-Group10-CI
 
     /**
      * Constructor for Build class.
@@ -21,17 +23,27 @@ public class Build {
      * @param buildStatus the status of the build.
      * @param testStatus  the status of the tests.
      */
-    public Build(String prId, String email, Status buildStatus, Status testStatus, String repo) {
+    public Build(String prId, String email, Status buildStatus, Status testStatus, String repo, String author, String time) {
         this.prId = prId;
         this.email = email;
         this.buildStatus = buildStatus;
         this.testStatus = testStatus;
         this.repo = repo;
+        this.author = author;
+        this.time = time;
     }
 
     // Default constructor
     public Build() {
     }
+
+    public String getAuthor() { return this.author; }
+
+    public String getTime() { return this.time; }
+
+    public void setAuthor(String author) { this.author = author; }
+
+    public void setTime(String time) { this.time = time; }
 
     /**
      * Get method for prId.
@@ -168,13 +180,20 @@ public class Build {
         this.repo = repo;
     }
 
-    public String toString() {
+    /**
+     * Formats the build object
+     * @returns the formatted build object as a String
+     * */
+    public String toString(){
         String s = "";
-        s += "Commit SHA: " + this.getPrId();
+        s += "Commit SHA: " + this.prId;
+        s += "\nBy: " + this.author;
+        s += "\nUpdated at: " + this.time;
         s += "\nBuild Status: " + this.getBuildStatus();
         s += "\nBuild info: " + this.getBuildInfo();
         s += "\nTest Status: " + this.getTestStatus();
         s += "\nTest info: " + this.getTestInfo();
+        s += "\n";
         return s;
     }
 }
