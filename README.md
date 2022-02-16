@@ -50,6 +50,7 @@ initial version of CIS: _handlePostRequest()_, Status enum, some minor additions
 Initial version of TestHandler, TestHandlerTest
 
 **Ludwig:**
+GitHandler, TestGitHandler, NotificationHandler NotificationHandlerTest, project setup, Build. TestBuild, some minor changes to CIS.
 
 **Sebastian:** 
 HistoryHandler, HistoryHandlerTest, HtmlFormater, CIS: _handleGetRequest()_, Some minor additions to Build, First version of the deploy script (run_ngrok.sh)
