@@ -51,7 +51,8 @@ Initial version of TestHandler, TestHandlerTest
 
 **Ludwig:**
 
-**Sebastian:**
+**Sebastian:** 
+HistoryHandler, HistoryHandlerTest, HtmlFormater, CIS: _handleGetRequest()_, Some minor additions to Build, First version of the deploy script (run_ngrok.sh)
 
 **Şefik:**
 Management and configuration of the remote server,
