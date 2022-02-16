@@ -58,7 +58,7 @@ Initial version of TestHandler, TestHandlerTest
 GitHandler, TestGitHandler, NotificationHandler NotificationHandlerTest, project setup, Build. TestBuild, some minor changes to CIS.
 
 **Sebastian:** 
-HistoryHandler, HistoryHandlerTest, HtmlFormater, CIS: _handleGetRequest()_, Some minor additions to Build, First version of the deploy script (run_ngrok.sh)
+HistoryHandler, HistoryHandlerTest, HtmlFormater, CIS: _handleGetRequest()_, FormatHandler, Some minor additions to Build, First version of the deploy script (run_ngrok.sh)
 
 **Şefik:**
 Management and configuration of the remote server,
