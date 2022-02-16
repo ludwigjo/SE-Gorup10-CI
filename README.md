@@ -38,8 +38,12 @@ We would thus argue that we are somewhere between Collaborating and Performing. 
 
 ## Statement of contribution
 **Amanda:**
+CompileHandler, CompileHandlerTest, BuildHandler, BuildHandlerTest, final version of TestHandler
+CIS: _getBody()_, CIS: _handle()_ (excluding the code provided in the skeleton), 
+initial version of CIS: _handlePostRequest()_, Status enum, some minor additions to Build 
 
 **Chiyi:**
+Initial version of TestHandler, TestHandlerTest
 
 **Ludwig:**
 
