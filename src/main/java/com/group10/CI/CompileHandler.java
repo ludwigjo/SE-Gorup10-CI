@@ -7,13 +7,14 @@ import java.io.*;
  * */
 public class CompileHandler extends BuildHandler {
 
+    /**
+     * Inherit from super class:
+     * protected String commitHash;
+     * protected Status status;
+     * protected String information;
+     * protected String repoPath;
+     */
     private final String[] COMPILE_COMMAND = new String[]{"mvn", "compile"};
-   /* protected String commitHash;
-    protected Status status;
-    protected String compilationInformation;
-    protected String repoPath;
-    protected String jointOutput;
-*/
 
     /**
      * Default constructor.

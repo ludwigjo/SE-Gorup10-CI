@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
  * */
 public class TestHandler extends BuildHandler {
     /**
-     *inherent from super class:
+     * Inherit from super class:
      * protected String commitHash;
      * protected Status status;
-     * protected String compilationInformation;
+     * protected String information;
      * protected String repoPath;
      */
     private final String[] TEST_COMMAND = new String[]{"mvn", "test"};
@@ -43,6 +43,5 @@ public class TestHandler extends BuildHandler {
         } catch (IOException | InterruptedException e) {
             System.out.println("--- ERROR ---\n" + e.getMessage());
         }
-
     }
 }

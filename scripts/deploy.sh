@@ -9,7 +9,7 @@ if [ $# -eq 1 ]; then
         mvn compile
 
         # deploy app to the port $1
-        nohup mvn exec:java -D"exec.mainClass"="com.group10.CI.ContinuousIntegrationServer" -Dexec.args="$1" &> /dev/null &
+        nohup mvn exec:java -D"exec.mainClass"="com.group10.CI.ContinuousIntegrationServer" -Dexec.args="$1" &>> log.log &
 
 else
         echo "Argument missing: You need to provide port to runt ngrok server"
