@@ -7,7 +7,7 @@ public class Build {
 
     private String prId;
     private String email;
-    private String repo;    //The repo name. Ex. ludwigjo/SE-Group10-CI
+    private String repo; // The repo name. Ex. ludwigjo/SE-Group10-CI
     private String author;
     private String time;
     private Status buildStatus;
@@ -23,7 +23,8 @@ public class Build {
      * @param buildStatus the status of the build.
      * @param testStatus  the status of the tests.
      */
-    public Build(String prId, String email, Status buildStatus, Status testStatus, String repo, String author, String time) {
+    public Build(String prId, String email, Status buildStatus, Status testStatus, String repo, String author,
+            String time) {
         this.prId = prId;
         this.email = email;
         this.buildStatus = buildStatus;
@@ -37,13 +38,21 @@ public class Build {
     public Build() {
     }
 
-    public String getAuthor() { return this.author; }
+    public String getAuthor() {
+        return this.author;
+    }
 
-    public String getTime() { return this.time; }
+    public String getTime() {
+        return this.time;
+    }
 
-    public void setAuthor(String author) { this.author = author; }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
-    public void setTime(String time) { this.time = time; }
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     /**
      * Get method for prId.
@@ -182,9 +191,10 @@ public class Build {
 
     /**
      * Formats the build object
+     * 
      * @returns the formatted build object as a String
-     * */
-    public String toString(){
+     */
+    public String toString() {
         String s = "";
         s += "Commit SHA: " + this.prId;
         s += "\nBy: " + this.author;
