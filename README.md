@@ -32,6 +32,17 @@ The Notification handler is using GitHub credentials to send the notifications. 
 ## How to use (For grader)
 The CI server is hosted on a AWS instance and ready to be tested. Since the webhook is configured to run on every PR event. We have prepared an Assessment branch which is has an open PR. Start by making a change to the assessment branch and make a commit. As soon as the commit is registered, the server will send the pending state to GitHub as status to that commit. When the build is finished and the tests are completed, the status will be updated. The link to view the history is available under the details in the status message. This will show more information on the build. 
 
+*Edit as of Feb 18*
+
+Link to CI server [http://3b82-18-222-141-151.ngrok.io](http://3b82-18-222-141-151.ngrok.io). This endpoint will display the message "No content here". 
+
+To access the history please use the endpoint ```/history/reponame``` or use this [link](http://3b82-18-222-141-151.ngrok.io/history/SE-Gorup10-CI). 
+
+To access a specific build please use the endpoint ```/history/reponame/commitSha```, for example [http://3b82-18-222-141-151.ngrok.io/history/SE-Gorup10-CI/f826f696e88e34e5ef473e4163d69fe942c7f429](http://3b82-18-222-141-151.ngrok.io/history/SE-Gorup10-CI/f826f696e88e34e5ef473e4163d69fe942c7f429). This link can be accessed in an open PR --> Checks --> Custom CI <ins>Details</ins>. 
+
+__Note__: While the build is pending, the website will display the content "No content here".
+
+
 ## P+ criteria
 We have done the P7 and P9 to qualify for P+. The server keeps track of the previous builds on a unique URL. These builds are stored on the server and is available even after a reboot. We have continuously made sure that we link our commits to an issue in the issue tracker. 
 
